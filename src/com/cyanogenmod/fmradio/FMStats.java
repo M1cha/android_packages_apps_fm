@@ -26,7 +26,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.caf.fmradio;
+package com.cyanogenmod.fmradio;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -247,8 +247,8 @@ public class FMStats extends Activity  {
     private static final Object[] sTimeArgs = new Object[5];
 
     private final String FREQ_LIST_FILE_NAME = "/freq_list_comma_separated.txt";
-    private static final String BAND_SWEEP_START_DELAY_TIMEOUT = "com.caf.fmradio.SWEEP_START_DELAY_EXP";
-    private static final String BAND_SWEEP_DWELL_DELAY_TIMEOUT = "com.caf.fmradio.SWEEP_DWELL_DELAY_EXP";
+    private static final String BAND_SWEEP_START_DELAY_TIMEOUT = "com.cyanogenmod.fmradio.SWEEP_START_DELAY_EXP";
+    private static final String BAND_SWEEP_DWELL_DELAY_TIMEOUT = "com.cyanogenmod.fmradio.SWEEP_DWELL_DELAY_EXP";
 
     private BroadcastReceiver mBandSweepDelayExprdListener = null;
     private BroadcastReceiver mBandSweepDwellExprdListener = null;

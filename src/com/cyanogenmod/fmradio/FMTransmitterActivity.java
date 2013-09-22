@@ -26,7 +26,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.caf.fmradio;
+package com.cyanogenmod.fmradio;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -69,16 +69,16 @@ import java.lang.ref.WeakReference; //import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-import com.caf.utils.FrequencyPicker;
-import com.caf.utils.FrequencyPickerDialog;
+import com.cyanogenmod.utils.FrequencyPicker;
+import com.cyanogenmod.utils.FrequencyPickerDialog;
 import android.content.ServiceConnection;
 
 import qcom.fmradio.FmConfig;
 import android.os.ServiceManager;
 
-import com.caf.fmradio.HorizontalNumberPicker.OnScrollFinishListener;
-import com.caf.fmradio.HorizontalNumberPicker.OnValueChangeListener;
-import com.caf.fmradio.HorizontalNumberPicker.Scale;
+import com.cyanogenmod.fmradio.HorizontalNumberPicker.OnScrollFinishListener;
+import com.cyanogenmod.fmradio.HorizontalNumberPicker.OnValueChangeListener;
+import com.cyanogenmod.fmradio.HorizontalNumberPicker.Scale;
 
 public class FMTransmitterActivity extends Activity {
    public static final String LOGTAG = "FMTransmitterActivity";

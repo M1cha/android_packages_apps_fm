@@ -21,7 +21,7 @@
  * @hide
  */
 
-package com.caf.fmradio;
+package com.cyanogenmod.fmradio;
 
 import android.app.Application;
 import android.util.Log;

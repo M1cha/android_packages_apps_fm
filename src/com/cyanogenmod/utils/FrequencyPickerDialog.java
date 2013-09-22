@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.caf.utils;
+package com.cyanogenmod.utils;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -30,8 +30,8 @@ import android.view.View;
 import qcom.fmradio.FmConfig;
 import qcom.fmradio.FmReceiver;
 
-import com.caf.fmradio.R;
-import com.caf.utils.FrequencyPicker.OnFrequencyChangedListener;
+import com.cyanogenmod.fmradio.R;
+import com.cyanogenmod.utils.FrequencyPicker.OnFrequencyChangedListener;
 
 /**
  * A simple dialog containing an FrequencyPicker.

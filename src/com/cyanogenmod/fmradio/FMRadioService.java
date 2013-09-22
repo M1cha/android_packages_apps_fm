@@ -26,7 +26,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.caf.fmradio;
+package com.cyanogenmod.fmradio;
 
 import java.io.File;
 import java.util.*;
@@ -76,7 +76,7 @@ import android.provider.MediaStore;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
-import com.caf.utils.A2dpDeviceStatus;
+import com.cyanogenmod.utils.A2dpDeviceStatus;
 import android.media.AudioManager;
 import android.content.ComponentName;
 import android.os.StatFs;
@@ -160,9 +160,9 @@ public class FMRadioService extends Service
    public static final long LOW_STORAGE_THRESHOLD = 50000000;
    private long mStorageSpace;
    private static final String IOBUSY_UNVOTE = "com.android.server.CpuGovernorService.action.IOBUSY_UNVOTE";
-   private static final String SLEEP_EXPIRED_ACTION = "com.caf.fmradio.SLEEP_EXPIRED";
-   private static final String RECORD_EXPIRED_ACTION = "com.caf.fmradio.RECORD_TIMEOUT";
-   private static final String SERVICE_DELAYED_STOP_ACTION = "com.caf.fmradio.SERVICE_STOP";
+   private static final String SLEEP_EXPIRED_ACTION = "com.cyanogenmod.fmradio.SLEEP_EXPIRED";
+   private static final String RECORD_EXPIRED_ACTION = "com.cyanogenmod.fmradio.RECORD_TIMEOUT";
+   private static final String SERVICE_DELAYED_STOP_ACTION = "com.cyanogenmod.fmradio.SERVICE_STOP";
    public static final String ACTION_FM =
                "codeaurora.intent.action.FM";
    public static final String ACTION_FM_RECORDING =
@@ -1123,7 +1123,7 @@ public class FMRadioService extends Service
               .setWhen(0);
 
       PendingIntent resultIntent = PendingIntent.getActivity(this, 0,
-              new Intent("com.caf.fmradio.FMRADIO_ACTIVITY"), 0);
+              new Intent("com.cyanogenmod.fmradio.FMRADIO_ACTIVITY"), 0);
       mRadioNotification.setContentIntent(resultIntent);
 
       mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);

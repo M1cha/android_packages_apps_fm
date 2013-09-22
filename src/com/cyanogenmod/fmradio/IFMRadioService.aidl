@@ -1,6 +1,6 @@
-package com.caf.fmradio;
+package com.cyanogenmod.fmradio;
 
-import com.caf.fmradio.IFMRadioServiceCallbacks;
+import com.cyanogenmod.fmradio.IFMRadioServiceCallbacks;
 
 interface IFMRadioService
 {

@@ -1,6 +1,6 @@
-package com.caf.fmradio;
+package com.cyanogenmod.fmradio;
 
-import com.caf.fmradio.IFMTransmitterServiceCallbacks;
+import com.cyanogenmod.fmradio.IFMTransmitterServiceCallbacks;
 interface IFMTransmitterService
 {
     boolean fmOn();

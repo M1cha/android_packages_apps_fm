@@ -27,7 +27,7 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.caf.fmradio;
+package com.cyanogenmod.fmradio;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -44,7 +44,7 @@ import java.lang.Object;
 public class FMMediaButtonIntentReceiver extends BroadcastReceiver {
 
 private static final String TAG = "FMMediaButtonIntentReceiver";
-public static final String FM_MEDIA_BUTTON = "com.caf.fmradio.action.MEDIA_BUTTON";
+public static final String FM_MEDIA_BUTTON = "com.cyanogenmod.fmradio.action.MEDIA_BUTTON";
 public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
        if ((action != null) && action.equals("android.intent.action.MEDIA_BUTTON")) {

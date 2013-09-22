@@ -26,7 +26,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.caf.fmradio;
+package com.cyanogenmod.fmradio;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -83,17 +83,17 @@ import java.util.ListIterator;
 import java.util.Locale;
 import java.util.ArrayList;
 
-import com.caf.utils.FrequencyPicker;
-import com.caf.utils.FrequencyPickerDialog;
+import com.cyanogenmod.utils.FrequencyPicker;
+import com.cyanogenmod.utils.FrequencyPickerDialog;
 import android.content.ServiceConnection;
 import android.media.MediaRecorder;
 
 import qcom.fmradio.FmConfig;
 import android.os.ServiceManager;
 
-import com.caf.fmradio.HorizontalNumberPicker.OnScrollFinishListener;
-import com.caf.fmradio.HorizontalNumberPicker.OnValueChangeListener;
-import com.caf.fmradio.HorizontalNumberPicker.Scale;
+import com.cyanogenmod.fmradio.HorizontalNumberPicker.OnScrollFinishListener;
+import com.cyanogenmod.fmradio.HorizontalNumberPicker.OnValueChangeListener;
+import com.cyanogenmod.fmradio.HorizontalNumberPicker.Scale;
 
 import android.content.SharedPreferences;
 

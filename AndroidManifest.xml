@@ -28,7 +28,7 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.caf.fmradio"
+    package="com.cyanogenmod.fmradio"
     android:sharedUserId="android.uid.system" >
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -63,13 +63,13 @@
             </intent-filter>
 
             <intent-filter>
-                <action android:name="com.caf.fmradio.FMRADIO_ACTIVITY" />
+                <action android:name="com.cyanogenmod.fmradio.FMRADIO_ACTIVITY" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
         </activity>
 
-        <receiver android:name="com.caf.fmradio.FMMediaButtonIntentReceiver">
+        <receiver android:name="com.cyanogenmod.fmradio.FMMediaButtonIntentReceiver">
             <intent-filter>
                  <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
@@ -97,7 +97,7 @@
             </intent-filter>
 
             <intent-filter>
-                <action android:name="com.caf.fmradio.FMTRANSMITTER_ACTIVITY" />
+                <action android:name="com.cyanogenmod.fmradio.FMTRANSMITTER_ACTIVITY" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 

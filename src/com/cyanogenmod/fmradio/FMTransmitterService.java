@@ -26,7 +26,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.caf.fmradio;
+package com.cyanogenmod.fmradio;
 
 import java.lang.ref.WeakReference;
 
@@ -61,7 +61,7 @@ import qcom.fmradio.FmRxEvCallbacksAdaptor;
 import qcom.fmradio.FmTransmitterCallbacksAdaptor;
 import qcom.fmradio.FmRxRdsData;
 import qcom.fmradio.FmConfig;
-import com.caf.utils.A2dpDeviceStatus;
+import com.cyanogenmod.utils.A2dpDeviceStatus;
 import android.media.IRemoteControlDisplay;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -288,7 +288,7 @@ public class FMTransmitterService extends Service
               .setWhen(0);
 
       PendingIntent resultIntent = PendingIntent.getActivity(this, 0,
-              new Intent("com.caf.fmradio.FMTRANSMITTER_ACTIVITY"), 0);
+              new Intent("com.cyanogenmod.fmradio.FMTRANSMITTER_ACTIVITY"), 0);
       mRadioNotification.setContentIntent(resultIntent);
 
       mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);

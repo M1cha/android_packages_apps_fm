@@ -19,7 +19,7 @@
 */
 -->
 
-<com.caf.utils.FrequencyPicker xmlns:android="http://schemas.android.com/apk/res/android"
+<com.cyanogenmod.utils.FrequencyPicker xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/frequencyPicker"
     android:padding="5dp"
     android:layout_gravity="center_horizontal"

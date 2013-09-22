@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.caf.fmradio;
+package com.cyanogenmod.fmradio;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

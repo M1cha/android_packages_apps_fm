@@ -26,7 +26,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.caf.fmradio;
+package com.cyanogenmod.fmradio;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -61,8 +61,8 @@ public class Settings extends PreferenceActivity implements
         public static final String USER_DEFINED_BAND_MIN_KEY = "user_defined_band_min";
         public static final String USER_DEFINED_BAND_MAX_KEY = "user_defined_band_max";
         public static final String CHAN_SPACING_KEY = "chanl_spacing";
-        public static final String RESTORE_FACTORY_DEFAULT_ACTION = "com.caf.fmradio.settings.revert_to_defaults";
-        public static final String ACTION_FM_SETTING = "com.caf.fmradio.settings.changed";
+        public static final String RESTORE_FACTORY_DEFAULT_ACTION = "com.cyanogenmod.fmradio.settings.revert_to_defaults";
+        public static final String ACTION_FM_SETTING = "com.cyanogenmod.fmradio.settings.changed";
         public static final int FM_BAND_CHANGED = 1;
         public static final int FM_CHAN_SPACING_CHANGED = 2;
         public static final int FM_AF_OPTION_CHANGED = 3;

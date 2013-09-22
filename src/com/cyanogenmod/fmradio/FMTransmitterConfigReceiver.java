@@ -26,7 +26,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.caf.fmradio;
+package com.cyanogenmod.fmradio;
 
 import android.content.Intent;
 import android.content.BroadcastReceiver;
@@ -77,7 +77,7 @@ public class FMTransmitterConfigReceiver extends BroadcastReceiver {
             PackageManager pManager = context.getPackageManager();
                if (pManager != null) {
                    Log.d(TAG, "disableing the FM Transmitter");
-                   ComponentName fmTransmitter = new ComponentName("com.caf.fmradio", "com.caf.fmradio.FMTransmitterActivity");
+                   ComponentName fmTransmitter = new ComponentName("com.cyanogenmod.fmradio", "com.cyanogenmod.fmradio.FMTransmitterActivity");
                    pManager.setComponentEnabledSetting(fmTransmitter, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                                                     PackageManager.DONT_KILL_APP);
                }

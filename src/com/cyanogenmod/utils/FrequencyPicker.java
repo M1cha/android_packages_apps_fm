@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.caf.utils;
+package com.cyanogenmod.utils;
 
 
 import android.content.Context;
@@ -28,7 +28,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
-import com.caf.fmradio_2.R;
+import com.cyanogenmod.fmradio_2.R;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnChangedListener;
 
