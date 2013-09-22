@@ -30,28 +30,9 @@ package com.cyanogenmod.fmradio;
 
 import java.util.*;
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.Handler;
-import android.os.Message;
-import android.os.RemoteException;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.ListView;
 
 
@@ -59,7 +40,7 @@ public class FmTags extends Activity {
       private ListView la;
       private ArrayAdapter<String> adapter;
       private final Handler mHandler = new Handler();
-      private Iterator itr;
+      private Iterator<String> itr;
 
       @Override
        public void onCreate(Bundle savedInstanceState) {
@@ -74,8 +55,8 @@ public class FmTags extends Activity {
        @Override
        public void onResume() {
             super.onResume();
-            mHandler.post(mDisplayTagList);
-       }
+		mHandler.post(mDisplayTagList);
+	}
        final Runnable mDisplayTagList = new Runnable() {
             public void run() {
                    String[] tags;
@@ -90,7 +71,7 @@ public class FmTags extends Activity {
                                               "\t" + (String)itr.next());
                        }
                    }
-                   adapter = new ArrayAdapter(la.getContext(), android.R.layout.simple_list_item_1, tags);
+                   adapter = new ArrayAdapter<String>(la.getContext(), android.R.layout.simple_list_item_1, tags);
                    la.setAdapter(adapter);
             }
        };

@@ -29,22 +29,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical" >
 
     <EditText
         android:id="@+id/list_edit"
-        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:scrollHorizontally="true"
-        android:hint="Enter a name"
-        android:singleLine="true"
-        android:inputType="text"
         android:autoText="false"
         android:capitalize="none"
         android:gravity="fill_horizontal"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:saveEnabled="false"/>
+        android:hint="Enter a name"
+        android:inputType="text"
+        android:saveEnabled="false"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>

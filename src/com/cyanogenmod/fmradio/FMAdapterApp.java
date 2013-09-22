@@ -27,38 +27,41 @@ import android.app.Application;
 import android.util.Log;
 
 public class FMAdapterApp extends Application {
-    private static final String TAG = "FMAdapterApp";
-    private static final boolean DBG = true;
-    //For Debugging only
-    private static int sRefCount=0;
+	private static final String TAG = "FMAdapterApp";
+	private static final boolean DBG = true;
+	// For Debugging only
+	private static int sRefCount = 0;
 
-    static {
-        if (DBG) Log.d(TAG,"Loading FM-JNI Library");
-        System.loadLibrary("qcomfm_jni");
-    }
+	static {
+		if (DBG)
+			Log.d(TAG, "Loading FM-JNI Library");
+		System.loadLibrary("qcomfm_jni");
+	}
 
-    public FMAdapterApp() {
-        super();
-        if (DBG) {
-            synchronized (FMAdapterApp.class) {
-                sRefCount++;
-                Log.d(TAG, "REFCOUNT: Constructed "+ this + " Instance Count = " + sRefCount);
-            }
-        }
-    }
+	public FMAdapterApp() {
+		super();
+		if (DBG) {
+			synchronized (FMAdapterApp.class) {
+				sRefCount++;
+				Log.d(TAG, "REFCOUNT: Constructed " + this
+						+ " Instance Count = " + sRefCount);
+			}
+		}
+	}
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-    }
+	@Override
+	public void onCreate() {
+		super.onCreate();
+	}
 
-    @Override
-    protected void finalize() {
-        if (DBG) {
-            synchronized (FMAdapterApp.class) {
-                sRefCount--;
-                Log.d(TAG, "REFCOUNT: Finalized: " + this +", Instance Count = " + sRefCount);
-            }
-        }
-    }
+	@Override
+	protected void finalize() {
+		if (DBG) {
+			synchronized (FMAdapterApp.class) {
+				sRefCount--;
+				Log.d(TAG, "REFCOUNT: Finalized: " + this
+						+ ", Instance Count = " + sRefCount);
+			}
+		}
+	}
 }

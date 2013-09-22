@@ -27,12 +27,12 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <scale xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="500"
+    android:fillBefore="true"
     android:fromXScale="0.75"
-    android:toXScale="1.5"
     android:fromYScale="0.75"
-    android:toYScale="1.5"
     android:pivotX="50%"
     android:pivotY="50%"
     android:startOffset="0"
-    android:duration="500"
-    android:fillBefore="true" />
+    android:toXScale="1.5"
+    android:toYScale="1.5" />

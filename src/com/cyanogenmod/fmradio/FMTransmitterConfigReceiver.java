@@ -39,49 +39,57 @@ import java.io.FileReader;
 import java.io.File;
 import java.lang.String;
 
-
 public class FMTransmitterConfigReceiver extends BroadcastReceiver {
 
-    private static FileReader socinfo_fd;
-    private static char[] socinfo = new char[20];
-    private static String build_id = "1";
+	private static FileReader socinfo_fd;
+	private static char[] socinfo = new char[20];
+	private static String build_id = "1";
 
-    private static final String TAG = "FMFolderConfigReceiver";
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        String action = intent.getAction();
-        Log.d(TAG, "Received intent: " + action);
-        if((action != null) && action.equals("android.intent.action.BOOT_COMPLETED")) {
-            Log.d(TAG, "boot complete intent received");
-            boolean isFmTransmitterSupported = SystemProperties.getBoolean("ro.fm.transmitter",true);
+	private static final String TAG = "FMFolderConfigReceiver";
 
-            if ("msm7630_surf".equals(SystemProperties.get("ro.board.platform"))) {
-                Log.d(TAG,"this is msm7630_surf");
-                try {
-                    File f = new File("/sys/devices/soc0/build_id");
-                    if (f.exists()) {
-                        socinfo_fd = new FileReader("/sys/devices/soc0/build_id");
-                    } else {
-                        socinfo_fd = new FileReader("/sys/devices/system/soc/soc0/build_id");
-                    }
-                    socinfo_fd.read(socinfo,0,20);
-                    socinfo_fd.close();
-                } catch(Exception e) {
-                    Log.e(TAG,"Exception in FileReader");
-                }
-                Log.d(TAG, "socinfo=" +socinfo);
-                build_id = new String(socinfo,17,1);
-                Log.d(TAG, "build_id=" +build_id);
-            }
-            if ((!isFmTransmitterSupported) || (build_id.equals("0"))) {
-            PackageManager pManager = context.getPackageManager();
-               if (pManager != null) {
-                   Log.d(TAG, "disableing the FM Transmitter");
-                   ComponentName fmTransmitter = new ComponentName("com.cyanogenmod.fmradio", "com.cyanogenmod.fmradio.FMTransmitterActivity");
-                   pManager.setComponentEnabledSetting(fmTransmitter, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                                                    PackageManager.DONT_KILL_APP);
-               }
-           }
-        }
-   }
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		String action = intent.getAction();
+		Log.d(TAG, "Received intent: " + action);
+		if ((action != null)
+				&& action.equals("android.intent.action.BOOT_COMPLETED")) {
+			Log.d(TAG, "boot complete intent received");
+			boolean isFmTransmitterSupported = SystemProperties.getBoolean(
+					"ro.fm.transmitter", true);
+
+			if ("msm7630_surf"
+					.equals(SystemProperties.get("ro.board.platform"))) {
+				Log.d(TAG, "this is msm7630_surf");
+				try {
+					File f = new File("/sys/devices/soc0/build_id");
+					if (f.exists()) {
+						socinfo_fd = new FileReader(
+								"/sys/devices/soc0/build_id");
+					} else {
+						socinfo_fd = new FileReader(
+								"/sys/devices/system/soc/soc0/build_id");
+					}
+					socinfo_fd.read(socinfo, 0, 20);
+					socinfo_fd.close();
+				} catch (Exception e) {
+					Log.e(TAG, "Exception in FileReader");
+				}
+				Log.d(TAG, "socinfo=" + String.valueOf(socinfo));
+				build_id = new String(socinfo, 17, 1);
+				Log.d(TAG, "build_id=" + build_id);
+			}
+			if ((!isFmTransmitterSupported) || (build_id.equals("0"))) {
+				PackageManager pManager = context.getPackageManager();
+				if (pManager != null) {
+					Log.d(TAG, "disableing the FM Transmitter");
+					ComponentName fmTransmitter = new ComponentName(
+							"com.cyanogenmod.fmradio",
+							"com.cyanogenmod.fmradio.FMTransmitterActivity");
+					pManager.setComponentEnabledSetting(fmTransmitter,
+							PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+							PackageManager.DONT_KILL_APP);
+				}
+			}
+		}
+	}
 }

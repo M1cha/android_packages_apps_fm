@@ -36,70 +36,78 @@ import android.content.Intent;
 import android.content.Context;
 
 public class A2dpDeviceStatus {
-    private BluetoothAdapter mAdapter;
-    private BluetoothA2dp mA2dp = null;
-    public String getActionSinkStateChangedString (){
-        return BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED;
-    }
-    public String getActionPlayStateChangedString (){
-        return BluetoothA2dp.ACTION_PLAYING_STATE_CHANGED;
-    }
-    public boolean  isA2dpStateChange( String action) {
-        if(action.equals(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED) ) {
-           return true;
-        }
-        return false;
-    }
-    public boolean  isA2dpPlayStateChange( String action) {
-        if(action.equals(BluetoothA2dp.ACTION_PLAYING_STATE_CHANGED) ) {
-           return true;
-        }
-        return false;
-    }
-    public boolean isConnected(Intent intent) {
-        boolean isConnected = false;
-        int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE,
-                                BluetoothA2dp.STATE_DISCONNECTED);
-        if((state == BluetoothA2dp.STATE_CONNECTED) || (state == BluetoothProfile.STATE_CONNECTED)) {
-            isConnected = true;
-        }
-        return isConnected;
-    }
-    public boolean isPlaying(Intent intent) {
-        boolean isPlaying = false;
-        int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE,
-                                BluetoothA2dp.STATE_DISCONNECTED);
-        if(state == BluetoothA2dp.STATE_PLAYING ) {
-            isPlaying = true;
-        }
-        return isPlaying;
-    }
-    public boolean isDeviceAvailable() {
-        if(null != mA2dp) {
-            if( 0 != mA2dp.getConnectedDevices().size() ) {
-                return true;
-            }
-        }
-        return false;
-    }
+	private BluetoothAdapter mAdapter;
+	private BluetoothA2dp mA2dp = null;
 
-    public A2dpDeviceStatus(Context mContext) {
-        mAdapter = BluetoothAdapter.getDefaultAdapter();
-        mAdapter.getProfileProxy(mContext, mProfileListener,
-                BluetoothProfile.A2DP);
-    }
-    private BluetoothProfile.ServiceListener mProfileListener =
-        new BluetoothProfile.ServiceListener() {
-    public void onServiceConnected(int profile, BluetoothProfile proxy) {
-        if (profile == BluetoothProfile.A2DP) {
-            mA2dp = (BluetoothA2dp) proxy;
-        }
-    }
-    public void onServiceDisconnected(int profile) {
-        if (profile == BluetoothProfile.A2DP) {
-            mA2dp = null;
-        }
-    }
-};
+	public String getActionSinkStateChangedString() {
+		return BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED;
+	}
+
+	public String getActionPlayStateChangedString() {
+		return BluetoothA2dp.ACTION_PLAYING_STATE_CHANGED;
+	}
+
+	public boolean isA2dpStateChange(String action) {
+		if (action.equals(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED)) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isA2dpPlayStateChange(String action) {
+		if (action.equals(BluetoothA2dp.ACTION_PLAYING_STATE_CHANGED)) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isConnected(Intent intent) {
+		boolean isConnected = false;
+		int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE,
+				BluetoothA2dp.STATE_DISCONNECTED);
+		if ((state == BluetoothA2dp.STATE_CONNECTED)
+				|| (state == BluetoothProfile.STATE_CONNECTED)) {
+			isConnected = true;
+		}
+		return isConnected;
+	}
+
+	public boolean isPlaying(Intent intent) {
+		boolean isPlaying = false;
+		int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE,
+				BluetoothA2dp.STATE_DISCONNECTED);
+		if (state == BluetoothA2dp.STATE_PLAYING) {
+			isPlaying = true;
+		}
+		return isPlaying;
+	}
+
+	public boolean isDeviceAvailable() {
+		if (null != mA2dp) {
+			if (0 != mA2dp.getConnectedDevices().size()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public A2dpDeviceStatus(Context mContext) {
+		mAdapter = BluetoothAdapter.getDefaultAdapter();
+		mAdapter.getProfileProxy(mContext, mProfileListener,
+				BluetoothProfile.A2DP);
+	}
+
+	private BluetoothProfile.ServiceListener mProfileListener = new BluetoothProfile.ServiceListener() {
+		public void onServiceConnected(int profile, BluetoothProfile proxy) {
+			if (profile == BluetoothProfile.A2DP) {
+				mA2dp = (BluetoothA2dp) proxy;
+			}
+		}
+
+		public void onServiceDisconnected(int profile) {
+			if (profile == BluetoothProfile.A2DP) {
+				mA2dp = null;
+			}
+		}
+	};
 }
-

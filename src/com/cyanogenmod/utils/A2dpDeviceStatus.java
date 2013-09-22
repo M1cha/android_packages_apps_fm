@@ -35,54 +35,61 @@ import android.content.Intent;
 
 import java.util.Set;
 
-
 public class A2dpDeviceStatus {
-    private BluetoothA2dp mA2dp = null;
-    public String getActionSinkStateChangedString (){
-        return BluetoothA2dp.ACTION_SINK_STATE_CHANGED;
-    }
-    public String getActionPlayStateChangedString (){
-        return BluetoothA2dp.ACTION_SINK_STATE_CHANGED;
-    }
-    public boolean  isA2dpStateChange( String action) {
-        if(action.equals(BluetoothA2dp.ACTION_SINK_STATE_CHANGED) ) {
-           return true;
-        }
-        return false;
-    }
-    public boolean  isA2dpPlayStateChange( String action) {
-        return isA2dpStateChange(action);
-    }
-    public boolean isConnected(Intent intent) {
-        boolean isConnected = false;
-        int state = intent.getIntExtra(BluetoothA2dp.EXTRA_SINK_STATE,
-                                BluetoothA2dp.STATE_DISCONNECTED);
-        if (state == BluetoothA2dp.STATE_CONNECTED ||
-                state == BluetoothA2dp.STATE_PLAYING){
-            isConnected = true;
-        }
-        return isConnected;
-    }
-    public boolean isPlaying(Intent intent) {
-        boolean isPlaying = false;
-        int state = intent.getIntExtra(BluetoothA2dp.EXTRA_SINK_STATE,
-                                BluetoothA2dp.STATE_DISCONNECTED);
-        if(state == BluetoothA2dp.STATE_PLAYING){
-            isPlaying = true;
-        }
-        return isPlaying;
-    }
-    public boolean isDeviceAvailable() {
-        if(null == mA2dp) return false;
-        Set<BluetoothDevice> sinks = mA2dp.getConnectedSinks();
-        if (sinks != null && sinks.size() != 0) {
-           return true;
-        }
-        return false;
-    }
+	private BluetoothA2dp mA2dp = null;
 
-    public A2dpDeviceStatus(Context mContext) {
-        mA2dp = new BluetoothA2dp(mContext);
-    }
+	public String getActionSinkStateChangedString() {
+		return BluetoothA2dp.ACTION_SINK_STATE_CHANGED;
+	}
+
+	public String getActionPlayStateChangedString() {
+		return BluetoothA2dp.ACTION_SINK_STATE_CHANGED;
+	}
+
+	public boolean isA2dpStateChange(String action) {
+		if (action.equals(BluetoothA2dp.ACTION_SINK_STATE_CHANGED)) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isA2dpPlayStateChange(String action) {
+		return isA2dpStateChange(action);
+	}
+
+	public boolean isConnected(Intent intent) {
+		boolean isConnected = false;
+		int state = intent.getIntExtra(BluetoothA2dp.EXTRA_SINK_STATE,
+				BluetoothA2dp.STATE_DISCONNECTED);
+		if (state == BluetoothA2dp.STATE_CONNECTED
+				|| state == BluetoothA2dp.STATE_PLAYING) {
+			isConnected = true;
+		}
+		return isConnected;
+	}
+
+	public boolean isPlaying(Intent intent) {
+		boolean isPlaying = false;
+		int state = intent.getIntExtra(BluetoothA2dp.EXTRA_SINK_STATE,
+				BluetoothA2dp.STATE_DISCONNECTED);
+		if (state == BluetoothA2dp.STATE_PLAYING) {
+			isPlaying = true;
+		}
+		return isPlaying;
+	}
+
+	public boolean isDeviceAvailable() {
+		if (null == mA2dp)
+			return false;
+		Set<BluetoothDevice> sinks = mA2dp.getConnectedSinks();
+		if (sinks != null && sinks.size() != 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public A2dpDeviceStatus(Context mContext) {
+		mA2dp = new BluetoothA2dp(mContext);
+	}
 
 }

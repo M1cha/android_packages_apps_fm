@@ -28,8 +28,9 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- -->
+-->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
     <string name="app_name">FM 收音机</string>
     <string name="menu_settings">设置</string>
     <string name="menu_record_start">开始录音</string>
@@ -82,17 +83,13 @@
     <string name="alert_dialog_ok">确定</string>
     <string name="alert_dialog_cancel">取消</string>
     <string name="search_dialog_title">搜索电台</string>
-
-        <string name="fm_command_timeout_title">超时</string>
-        <string name="fm_tune_timeout_msg">打开FM电台无响应。
+    <string name="fm_command_timeout_title">超时</string>
+    <string name="fm_tune_timeout_msg">打开FM电台无响应。
                      如果问题持续, 请重新启动FM收音机。</string>
-        <string name="fm_command_failed_title">FM 操作失败</string>
-        <string name="fm_cmd_failed_msg">FM 操作失败。如果问题持续， 请重新启动FM收音机。
-        </string>
-        <string name="fm_cmd_failed_msg_hdmi">FM 操作失败。 不支持 FM 和 HDMI 并发 。
-        </string>
-        <string name="fm_cmd_failed_call_on">FM 操作失败。通话期间禁止FM音频 </string>
-
+    <string name="fm_command_failed_title">FM 操作失败</string>
+    <string name="fm_cmd_failed_msg">FM 操作失败。如果问题持续， 请重新启动FM收音机。</string>
+    <string name="fm_cmd_failed_msg_hdmi">FM 操作失败。 不支持 FM 和 HDMI 并发 。</string>
+    <string name="fm_cmd_failed_call_on">FM 操作失败。通话期间禁止FM音频 </string>
     <string name="station_name">电台:</string>
     <string name="station_exists">此频率已存在!</string>
     <string name="stat_notif_frequency">FM 收音机 "<xliff:g id="frequency">%1$s</xliff:g>" MHz</string>

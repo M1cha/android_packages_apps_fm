@@ -26,10 +26,10 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
- <selector xmlns:android="http://schemas.android.com/apk/res/android">
-     <item android:state_enabled="false"
-           android:drawable="@drawable/ic_btn_forward_dis" /> <!-- disabled -->
-     <item android:state_enabled="true"
-           android:drawable="@drawable/ic_btn_forward" /> <!-- enabled -->
-     <item android:drawable="@drawable/ic_btn_forward" /> <!-- default -->
- </selector>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/ic_btn_forward_dis" android:state_enabled="false"/> <!-- disabled -->
+    <item android:drawable="@drawable/ic_btn_forward" android:state_enabled="true"/> <!-- enabled -->
+    <item android:drawable="@drawable/ic_btn_forward"/> <!-- default -->
+
+</selector>

@@ -30,31 +30,24 @@ package com.cyanogenmod.fmradio;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.os.Handler.Callback;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,278 +57,278 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 
 public class StationListActivity extends Activity implements
-        View.OnCreateContextMenuListener {
+		View.OnCreateContextMenuListener {
 
-    private static final String LOGTAG = "StationList";
-    private ListView mStationList;
-    private PresetList mPresetList;
-    private SimpleAdapter mAdapter;
-    private static IFMRadioService mService = null;
-    private static final int CONTEXT_MENU_RENAME = 1;
-    private static final int CONTEXT_MENU_DELETE = 2;
+	private static final String LOGTAG = "StationList";
+	private ListView mStationList;
+	private SimpleAdapter mAdapter;
+	private static IFMRadioService mService = null;
+	private static final int CONTEXT_MENU_RENAME = 1;
+	private static final int CONTEXT_MENU_DELETE = 2;
 
-    static final int DIALOG_RENAME_ID = 0;
-    static final int DIALOG_DELETE_ID = 1;
-    // private static String mDialogTitle;
-    private static String mDialogStationName;
-    private static int mItemId;
-    private Dialog mRenameDialog;
-    private Dialog mDeleteDialog;
-    //whether is the first headset plug event
-    private boolean isFirst = true;
-    private ServiceConnection osc = new ServiceConnection() {
-        public void onServiceConnected(ComponentName classname, IBinder obj) {
-            mService = IFMRadioService.Stub.asInterface(obj);
-            if (mService != null) {
-                return;
-            } else {
-                Log.e(LOGTAG, "IFMRadioService onServiceConnected failed");
-            }
-        }
+	static final int DIALOG_RENAME_ID = 0;
+	static final int DIALOG_DELETE_ID = 1;
 
-        public void onServiceDisconnected(ComponentName classname) {
-        }
-    };
+	private static int mItemId;
+	private Dialog mRenameDialog;
+	private Dialog mDeleteDialog;
 
-    ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-    HashMap<Integer, Integer> mIndex = new HashMap<Integer, Integer>();
+	private ServiceConnection osc = new ServiceConnection() {
+		public void onServiceConnected(ComponentName classname, IBinder obj) {
+			mService = IFMRadioService.Stub.asInterface(obj);
+			if (mService != null) {
+				return;
+			} else {
+				Log.e(LOGTAG, "IFMRadioService onServiceConnected failed");
+			}
+		}
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.station_list);
-        bindService((new Intent()).setClass(this, FMRadioService.class), osc, 0);
+		public void onServiceDisconnected(ComponentName classname) {
+		}
+	};
 
-        mStationList = (ListView) findViewById(R.id.station_list);
-        // mPresetList = new PresetList("StationList");
-        mStationList.setOnCreateContextMenuListener(this);
-        mStationList.setOnItemClickListener(new OnItemClickListener() {
+	ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+	SparseIntArray mIndex = new SparseIntArray();
 
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                    long arg3) {
-                String freq = ((HashMap<String, String>) mAdapter.getItem(arg2))
-                        .get("freq");
-                Float fFreq = Float.parseFloat(freq);
-                if (mService != null) {
-                    try {
-                        mService.tune((int) ((fFreq * 1000)));
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Log.d(LOGTAG, "mService is null........");
-                }
-            }
-        });
-    }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.station_list);
+		bindService((new Intent()).setClass(this, FMRadioService.class), osc, 0);
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        // TODO Auto-generated method stub
-        AdapterContextMenuInfo mi = (AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-        case CONTEXT_MENU_RENAME:
-            showDialog(DIALOG_RENAME_ID);
-            break;
-        case CONTEXT_MENU_DELETE:
-            showDialog(DIALOG_DELETE_ID);
-            break;
+		mStationList = (ListView) findViewById(R.id.station_list);
+		mStationList.setOnCreateContextMenuListener(this);
+		mStationList.setOnItemClickListener(new OnItemClickListener() {
 
-        }
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				String freq = ((HashMap<String, String>) mAdapter.getItem(arg2))
+						.get("freq");
+				Float fFreq = Float.parseFloat(freq);
+				if (mService != null) {
+					try {
+						mService.tune((int) ((fFreq * 1000)));
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+				} else {
+					Log.d(LOGTAG, "mService is null........");
+				}
+			}
+		});
+	}
 
-        return true;
-    }
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case CONTEXT_MENU_RENAME:
+			showDialog(DIALOG_RENAME_ID);
+			break;
+		case CONTEXT_MENU_DELETE:
+			showDialog(DIALOG_DELETE_ID);
+			break;
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-            ContextMenuInfo menuInfo) {
-        // TODO Auto-generated method stub
-        AdapterContextMenuInfo mi = (AdapterContextMenuInfo) menuInfo;
-        menu.add(0, CONTEXT_MENU_RENAME, 0, getString(R.string.preset_rename));
-        menu.add(0, CONTEXT_MENU_DELETE, 0, getString(R.string.preset_delete));
-        mItemId = mi.position;
-        menu.setHeaderTitle(getString(R.string.station_name)+getNameFromId(mItemId));
-    }
+		}
 
-    @Override
-    protected void onResume() {
-        // TODO Auto-generated method stub
-        load();
-        super.onResume();
-    }
+		return true;
+	}
 
-    private boolean stationNameExist(String name) {
-        for (HashMap<String, String> item : list) {
-            if (item != null && name.equals(item.get("name"))) {
-                return true;
-            }
-        }
-        return false;
-    }
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		AdapterContextMenuInfo mi = (AdapterContextMenuInfo) menuInfo;
+		menu.add(0, CONTEXT_MENU_RENAME, 0, getString(R.string.preset_rename));
+		menu.add(0, CONTEXT_MENU_DELETE, 0, getString(R.string.preset_delete));
+		mItemId = mi.position;
+		menu.setHeaderTitle(getString(R.string.station_name)
+				+ getNameFromId(mItemId));
+	}
 
-    @Override
-    protected void onPrepareDialog(int id, Dialog dialog, Bundle b) {
-        // TODO Auto-generated method stub
-        // super.onPrepareDialog(id, dialog);
-        // After change system language, current function will be executed before
-        // onResume , so execute load to ensure adapter is not null.
-        load();
-        switch (id) {
-        case DIALOG_RENAME_ID:
-            mRenameDialog.setTitle(getString(R.string.station_name)+getNameFromId(mItemId));
-            final EditText editText = (EditText) mRenameDialog
-                    .findViewById(R.id.name);
-            editText.setText(getNameFromId(mItemId));
-            Button bOk = (Button) mRenameDialog.findViewById(R.id.save);
+	@Override
+	protected void onResume() {
+		load();
+		super.onResume();
+	}
 
-            bOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String rename = editText.getText().toString();
-                    if (TextUtils.isEmpty(rename) || TextUtils.isEmpty(rename.trim())) {
-                        Context context = getApplicationContext();
-                        Toast toast = Toast.makeText(context, getString(R.string.station_name_empty),
-                                Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
-                        toast.show();
-                    } else if (stationNameExist(rename)) {
-                        Context context = getApplicationContext();
-                        Toast toast = Toast.makeText(context,
-                                getString(R.string.station_name_exist, rename), Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
-                        toast.show();
-                    } else {
-                        saveStationName(mItemId,rename);
-                        mRenameDialog.dismiss();
-                    }
-                }
+	private boolean stationNameExist(String name) {
+		for (HashMap<String, String> item : list) {
+			if (item != null && name.equals(item.get("name"))) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-            });
-            Button bCancel = (Button) mRenameDialog.findViewById(R.id.cancel);
-            bCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    mRenameDialog.dismiss();
-                }
-            });
-            break;
-        case DIALOG_DELETE_ID:
-            mDeleteDialog.setTitle(getString(R.string.station_list_delete_station, getNameFromId(mItemId)));
-            TextView prompt = (TextView) mDeleteDialog.findViewById(R.id.prompt);
-            prompt.setText(getString(R.string.station_list_delete_station_prompt,getNameFromId(mItemId)));
-            Button bDelete = (Button) mDeleteDialog.findViewById(R.id.delete);
+	@Override
+	protected void onPrepareDialog(int id, Dialog dialog, Bundle b) {
+		// super.onPrepareDialog(id, dialog);
+		// After change system language, current function will be executed
+		// before
+		// onResume , so execute load to ensure adapter is not null.
+		load();
+		switch (id) {
+		case DIALOG_RENAME_ID:
+			mRenameDialog.setTitle(getString(R.string.station_name)
+					+ getNameFromId(mItemId));
+			final EditText editText = (EditText) mRenameDialog
+					.findViewById(R.id.name);
+			editText.setText(getNameFromId(mItemId));
+			Button bOk = (Button) mRenameDialog.findViewById(R.id.save);
 
-            bDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    deleteStation(mItemId);
-                    mDeleteDialog.dismiss();
-                }
-            });
-            Button bCancelDelete = (Button) mDeleteDialog.findViewById(R.id.cancel);
-            bCancelDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mDeleteDialog.dismiss();
-                }
-            });
-            break;
-        }
-    }
+			bOk.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					String rename = editText.getText().toString();
+					if (TextUtils.isEmpty(rename)
+							|| TextUtils.isEmpty(rename.trim())) {
+						Context context = getApplicationContext();
+						Toast toast = Toast.makeText(context,
+								getString(R.string.station_name_empty),
+								Toast.LENGTH_SHORT);
+						toast.setGravity(Gravity.CENTER_HORIZONTAL
+								| Gravity.CENTER_VERTICAL, 0, 0);
+						toast.show();
+					} else if (stationNameExist(rename)) {
+						Context context = getApplicationContext();
+						Toast toast = Toast.makeText(context,
+								getString(R.string.station_name_exist, rename),
+								Toast.LENGTH_SHORT);
+						toast.setGravity(Gravity.CENTER_HORIZONTAL
+								| Gravity.CENTER_VERTICAL, 0, 0);
+						toast.show();
+					} else {
+						saveStationName(mItemId, rename);
+						mRenameDialog.dismiss();
+					}
+				}
 
-    @Override
-    protected Dialog onCreateDialog(int id, Bundle b) {
-        // TODO Auto-generated method stub
-        //should return different dialog
-        switch (id) {
-        case DIALOG_RENAME_ID:
-            mRenameDialog = new Dialog(this);
-            mRenameDialog.setContentView(R.layout.rename_dialog);
-            return mRenameDialog;
-        case DIALOG_DELETE_ID:
-            mDeleteDialog = new Dialog(this);
-            mDeleteDialog.setContentView(R.layout.delete_dialog);
-            return mDeleteDialog;
-        default:
-            ;
-        }
-        return null;
-    }
+			});
+			Button bCancel = (Button) mRenameDialog.findViewById(R.id.cancel);
+			bCancel.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mRenameDialog.dismiss();
+				}
+			});
+			break;
+		case DIALOG_DELETE_ID:
+			mDeleteDialog.setTitle(getString(
+					R.string.station_list_delete_station,
+					getNameFromId(mItemId)));
+			TextView prompt = (TextView) mDeleteDialog
+					.findViewById(R.id.prompt);
+			prompt.setText(getString(
+					R.string.station_list_delete_station_prompt,
+					getNameFromId(mItemId)));
+			Button bDelete = (Button) mDeleteDialog.findViewById(R.id.delete);
 
-    private void saveStationName(int id, String name) {
-        Integer stationIndex = mIndex.get(new Integer(id));
-        SharedPreferences sp = getSharedPreferences(
-                FMRadio.SCAN_STATION_PREFS_NAME, 0);
-        SharedPreferences.Editor editor = sp.edit();
-        editor
-                .putString(FMRadio.STATION_NAME + (stationIndex.intValue()),
-                        name);
-        editor.commit();
-        load();
-    }
+			bDelete.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					deleteStation(mItemId);
+					mDeleteDialog.dismiss();
+				}
+			});
+			Button bCancelDelete = (Button) mDeleteDialog
+					.findViewById(R.id.cancel);
+			bCancelDelete.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mDeleteDialog.dismiss();
+				}
+			});
+			break;
+		}
+	}
 
-    private void deleteStation(int id) {
-        SharedPreferences sp = getSharedPreferences(
-                FMRadio.SCAN_STATION_PREFS_NAME, 0);
-        Integer stationIndex = mIndex.get(new Integer(id));
-        SharedPreferences.Editor editor = sp.edit();
-        editor.remove(FMRadio.STATION_NAME + (stationIndex));
-        editor.remove(FMRadio.STATION_FREQUENCY + (stationIndex));
-        editor.commit();
-        load();
-    }
+	@Override
+	protected Dialog onCreateDialog(int id, Bundle b) {
+		// should return different dialog
+		switch (id) {
+		case DIALOG_RENAME_ID:
+			mRenameDialog = new Dialog(this);
+			mRenameDialog.setContentView(R.layout.rename_dialog);
+			return mRenameDialog;
+		case DIALOG_DELETE_ID:
+			mDeleteDialog = new Dialog(this);
+			mDeleteDialog.setContentView(R.layout.delete_dialog);
+			return mDeleteDialog;
+		default:
+			;
+		}
+		return null;
+	}
 
-    private int getFrequencyFromId(int id) {
-        String freq = ((HashMap<String, String>) mAdapter.getItem(id))
-                .get("freq");
-        Float fFreq = Float.parseFloat(freq);
-        return (int) ((fFreq * 1000));
-    }
+	private void saveStationName(int id, String name) {
+		Integer stationIndex = mIndex.get(Integer.valueOf(id));
+		SharedPreferences sp = getSharedPreferences(
+				FMRadio.SCAN_STATION_PREFS_NAME, 0);
+		SharedPreferences.Editor editor = sp.edit();
+		editor.putString(FMRadio.STATION_NAME + (stationIndex.intValue()), name);
+		editor.commit();
+		load();
+	}
 
-    private String getNameFromId(int id) {
-        String name = ((HashMap<String, String>) mAdapter.getItem(id))
-                .get("name");
-        return name;
+	private void deleteStation(int id) {
+		SharedPreferences sp = getSharedPreferences(
+				FMRadio.SCAN_STATION_PREFS_NAME, 0);
+		Integer stationIndex = mIndex.get(Integer.valueOf(id));
+		SharedPreferences.Editor editor = sp.edit();
+		editor.remove(FMRadio.STATION_NAME + (stationIndex));
+		editor.remove(FMRadio.STATION_FREQUENCY + (stationIndex));
+		editor.commit();
+		load();
+	}
 
-    }
+	private int getFrequencyFromId(int id) {
+		String freq = ((HashMap<String, String>) mAdapter.getItem(id))
+				.get("freq");
+		Float fFreq = Float.parseFloat(freq);
+		return (int) ((fFreq * 1000));
+	}
 
-    protected void load() {
-        list.clear();
-        mIndex.clear();
-        SharedPreferences sp = getSharedPreferences(
-                FMRadio.SCAN_STATION_PREFS_NAME, 0);
-        int station_number = sp.getInt(FMRadio.NUM_OF_STATIONS, 0);
-        for (int i = 1; i <= station_number; i++) {
-            HashMap<String, String> item = new HashMap<String, String>();
-            String name = sp.getString(FMRadio.STATION_NAME + i, "");
+	private String getNameFromId(int id) {
+		String name = ((HashMap<String, String>) mAdapter.getItem(id))
+				.get("name");
+		return name;
 
-            int frequency = sp.getInt(FMRadio.STATION_FREQUENCY + i, 0);
+	}
 
-            if (!name.equals("") && frequency != 0) {
-                item.put("name", name);
-                item.put("freq", String.valueOf(frequency / 1000.0f));
-                mIndex.put(new Integer(list.size()), new Integer(i));
-                list.add(item);
-            }
-        }
+	protected void load() {
+		list.clear();
+		mIndex.clear();
+		SharedPreferences sp = getSharedPreferences(
+				FMRadio.SCAN_STATION_PREFS_NAME, 0);
+		int station_number = sp.getInt(FMRadio.NUM_OF_STATIONS, 0);
+		for (int i = 1; i <= station_number; i++) {
+			HashMap<String, String> item = new HashMap<String, String>();
+			String name = sp.getString(FMRadio.STATION_NAME + i, "");
 
-        mAdapter = new SimpleAdapter(this, list, R.layout.station_list_item,
-                new String[] { "name", "freq" }, new int[] { R.id.name,
-                        R.id.freq });
+			int frequency = sp.getInt(FMRadio.STATION_FREQUENCY + i, 0);
 
-        mStationList.setAdapter(mAdapter);
-    }
+			if (!name.equals("") && frequency != 0) {
+				item.put("name", name);
+				item.put("freq", String.valueOf(frequency / 1000.0f));
+				mIndex.put(Integer.valueOf(list.size()), Integer.valueOf(i));
+				list.add(item);
+			}
+		}
 
-    @Override
-    protected void onDestroy() {
-        unbindService(osc);
-        mService = null;
-        super.onDestroy();
-    }
+		mAdapter = new SimpleAdapter(this, list, R.layout.station_list_item,
+				new String[] { "name", "freq" }, new int[] { R.id.name,
+						R.id.freq });
+
+		mStationList.setAdapter(mAdapter);
+	}
+
+	@Override
+	protected void onDestroy() {
+		unbindService(osc);
+		mService = null;
+		super.onDestroy();
+	}
 
 }

@@ -28,22 +28,23 @@
 -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:scrollbars="vertical"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical" >
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:layout_gravity="center_horizontal"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/lbl_band_sweep_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="@string/band_sweep_choose"/>
+            android:text="@string/band_sweep_choose"
+            android:textSize="15sp" />
 
         <Spinner
             android:id="@+id/band_sweep_spinner"
@@ -51,40 +52,39 @@
             android:layout_height="75dp"
             android:layout_below="@id/lbl_band_sweep_spinner"
             android:prompt="@string/band_method_prompt"
-            android:textSize="25sp"/>
+            android:textSize="25sp" />
 
         <TextView
             android:id="@+id/LabelStartdelay"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
             android:layout_below="@id/band_sweep_spinner"
-            android:text="@string/enter_start_delay_time"/>
+            android:text="@string/enter_start_delay_time"
+            android:textSize="15sp" />
 
         <EditText
             android:id="@+id/txtboxDelayTime"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
+            android:layout_toRightOf="@id/LabelStartdelay"
             android:inputType="number"
-            android:layout_toRightOf="@id/LabelStartdelay"/>
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/LabelDwellTime"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
             android:layout_below="@id/LabelStartdelay"
-            android:text="@string/enter_dwell_time"/>
+            android:text="@string/enter_dwell_time"
+            android:textSize="15sp" />
 
         <EditText
             android:id="@+id/txtboxDwellTime"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
+            android:layout_toRightOf="@id/LabelDwellTime"
             android:inputType="number"
-            android:layout_toRightOf="@id/LabelDwellTime"/>
-
+            android:textSize="15sp" />
     </LinearLayout>
 
 </ScrollView>

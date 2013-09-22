@@ -28,104 +28,104 @@
 -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:scrollbars="vertical"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_width="fill_parent">
+    android:scrollbars="vertical" >
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical">
+        android:orientation="vertical" >
 
-       <Spinner
-           android:id="@+id/spinner"
-           android:layout_width="fill_parent"
-           android:layout_height="75dp"
-           android:prompt="@string/test_prompt"
-           android:textSize="25sp"/>
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="75dp"
+            android:prompt="@string/test_prompt"
+            android:textSize="25sp" />
 
-       <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-           android:layout_width="fill_parent"
-           android:layout_height="100dp">
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp" >
 
-           <Button
-               android:id= "@+id/Runbutton"
-               android:text="@string/band_sweep_setting"
-               android:layout_width="wrap_content"
-               android:layout_height="100dp"
-               android:textSize="25dp"
-               android:visibility="gone"/>
+            <Button
+                android:id="@+id/Runbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:text="@string/band_sweep_setting"
+                android:textSize="25dp"
+                android:visibility="gone" />
 
-           <TextView
-               android:id= "@+id/BandSweepSetting"
-               android:text="@string/band_sweep_setting"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_toRightOf="@id/Runbutton"
-               android:textSize="25sp"
-               android:visibility="gone"/>
+            <TextView
+                android:id="@+id/BandSweepSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/Runbutton"
+                android:text="@string/band_sweep_setting"
+                android:textSize="25sp"
+                android:visibility="gone" />
 
-           <ProgressBar android:id="@+id/progressbar"
-               android:layout_width="100dp"
-               android:layout_height="100dp"
-               android:layout_toRightOf="@id/Runbutton"
-               android:visibility="gone"/>
+            <ProgressBar
+                android:id="@+id/progressbar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_toRightOf="@id/Runbutton"
+                android:visibility="gone" />
 
-           <TextView
-               android:id="@+id/label"
-               android:layout_width="fill_parent"
-               android:layout_height="wrap_content"
-               android:textSize="15sp"
-               android:text="@string/enter_rssi"
-               android:visibility="gone"/>
+            <TextView
+                android:id="@+id/label"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/enter_rssi"
+                android:textSize="15sp"
+                android:visibility="gone" />
 
-           <EditText
-               android:id="@+id/txtbox1"
-               android:layout_width="100dp"
-               android:layout_height="50dp"
-               android:text="@string/type_rd"
-               android:textSize="15sp"
-               android:layout_alignParentRight="true"
-               android:visibility="gone"/>
+            <EditText
+                android:id="@+id/txtbox1"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:text="@string/type_rd"
+                android:textSize="15sp"
+                android:visibility="gone" />
 
-           <Button
-               android:id= "@+id/Setbutton"
-               android:text="@string/set_rmmsi_delta"
-               android:layout_width="wrap_content"
-               android:layout_height="100dp"
-               android:layout_below="@id/txtbox1"
-               android:textSize="15sp"
-               android:visibility="gone"/>
+            <Button
+                android:id="@+id/Setbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_below="@id/txtbox1"
+                android:text="@string/set_rmmsi_delta"
+                android:textSize="15sp"
+                android:visibility="gone" />
 
-           <Button
-               android:id="@+id/SearchMpxDcc"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="@string/search_algo_mpx"
-               android:visibility="gone"/>
+            <Button
+                android:id="@+id/SearchMpxDcc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_algo_mpx"
+                android:visibility="gone" />
 
-           <Button
-               android:id="@+id/SearchSinrInt"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="@string/search_algo_sinrint"
-               android:layout_below="@id/SearchMpxDcc"
-               android:visibility="gone"/>
+            <Button
+                android:id="@+id/SearchSinrInt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/SearchMpxDcc"
+                android:text="@string/search_algo_sinrint"
+                android:visibility="gone" />
+        </RelativeLayout>
 
-       </RelativeLayout>
+        <TableLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/maintable"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scrollbars="vertical" >
 
-       <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-           android:id="@+id/maintable"
-           android:layout_width="fill_parent"
-           android:layout_height="fill_parent"
-           android:scrollbars="vertical">
-
-           <TableRow
-               android:id="@+id/mainrow">
-           </TableRow>
-
-       </TableLayout>
-
+            <TableRow android:id="@+id/mainrow" >
+            </TableRow>
+        </TableLayout>
     </LinearLayout>
 
 </ScrollView>

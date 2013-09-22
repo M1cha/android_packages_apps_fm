@@ -28,172 +28,184 @@
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fmradio"
-    android:background="@drawable/bg_landscape"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:background="@drawable/bg_landscape"
+    android:orientation="vertical" >
 
-    <RelativeLayout android:id="@+id/layout_on_off"
+    <RelativeLayout
+        android:id="@+id/layout_on_off"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true" >
 
-        <ImageView android:id="@+id/btn_onoff"
-            android:src="@drawable/btn_onoff"
+        <ImageView
+            android:id="@+id/btn_onoff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="15dp"
-            android:layout_width="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            android:layout_height="wrap_content" />
+            android:src="@drawable/btn_onoff" />
 
-        <TextView android:id="@+id/record_msg_tv"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+        <TextView
+            android:id="@+id/record_msg_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/recorder_start"
             android:layout_marginLeft="25dp"
             android:layout_toRightOf="@+id/btn_onoff"
+            android:clickable="true"
+            android:drawableLeft="@drawable/recorder_start"
+            android:focusable="true"
+            android:text="@string/default_record"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="invisible"
-            android:text="@string/default_record"/>
+            android:visibility="invisible" />
 
-        <TextView android:id="@+id/prog_service_tv"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+        <TextView
+            android:id="@+id/prog_service_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_toRightOf="@+id/record_msg_tv"
             android:layout_toLeftOf="@+id/btn_silent"
-            android:textSize="16sp"
+            android:layout_toRightOf="@+id/record_msg_tv"
+            android:gravity="center"
             android:singleLine="true"
-            android:textStyle="bold"
-            android:text="@string/prog_service_string"/>
+            android:text="@string/prog_service_string"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-        <ImageView android:id="@+id/btn_silent"
-            android:src="@drawable/ic_silent_mode_off"
-            android:layout_toLeftOf="@+id/btn_speaker_earphone"
+        <ImageView
+            android:id="@+id/btn_silent"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/btn_speaker_earphone"
             android:clickable="true"
             android:focusable="true"
-            android:layout_height="wrap_content" />
+            android:src="@drawable/ic_silent_mode_off" />
 
-        <ImageView android:id="@+id/btn_speaker_earphone"
-            android:src="@drawable/btn_earphone"
+        <ImageView
+            android:id="@+id/btn_speaker_earphone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:clickable="true"
             android:focusable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
+            android:src="@drawable/btn_earphone" />
     </RelativeLayout>
 
-    <RelativeLayout android:id="@+id/stationinfo_layout"
+    <RelativeLayout
+        android:id="@+id/stationinfo_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/layout_on_off">
+        android:layout_below="@+id/layout_on_off" >
 
         <!-- This included layout contains Station Information to display -->
-        <include layout="@layout/station_info" />
 
+        <include layout="@layout/station_info" />
     </RelativeLayout>
 
     <com.cyanogenmod.fmradio.HorizontalNumberPicker
         android:id="@+id/fm_picker"
         android:layout_width="fill_parent"
         android:layout_height="175dp"
-        android:layout_marginBottom="50dp"
-        android:layout_below="@+id/stationinfo_layout"/>
+        android:layout_below="@+id/stationinfo_layout"
+        android:layout_marginBottom="50dp" />
 
     <HorizontalScrollView
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:fillViewport="true"
         android:layout_alignParentBottom="true"
-        android:scrollbars="none">
+        android:fillViewport="true"
+        android:scrollbars="none" >
 
-        <LinearLayout android:id="@+id/favorite_list"
+        <LinearLayout
+            android:id="@+id/favorite_list"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal" >
 
-            <Button android:id="@+id/presets_button_1"
+            <Button
+                android:id="@+id/presets_button_1"
                 style="@style/ButtonStripLeft"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true"
                 android:text="@string/add_station"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp"
-                android:singleLine="true"
-                android:layout_weight="1"
-                android:layout_width="85dp"
-                android:layout_height="wrap_content"/>
+                android:textSize="12sp" />
 
-            <Button android:id="@+id/presets_button_2"
+            <Button
+                android:id="@+id/presets_button_2"
                 style="@style/ButtonStripMiddle"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true"
                 android:text="@string/add_station"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp"
-                android:singleLine="true"
-                android:layout_weight="1"
-                android:layout_width="85dp"
-                android:layout_height="wrap_content"/>
+                android:textSize="12sp" />
 
-            <Button android:id="@+id/presets_button_3"
+            <Button
+                android:id="@+id/presets_button_3"
                 style="@style/ButtonStripMiddle"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true"
                 android:text="@string/add_station"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp"
-                android:singleLine="true"
-                android:layout_weight="1"
-                android:layout_width="85dp"
-                android:layout_height="wrap_content"/>
+                android:textSize="12sp" />
 
-            <Button android:id="@+id/presets_button_4"
+            <Button
+                android:id="@+id/presets_button_4"
                 style="@style/ButtonStripMiddle"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true"
                 android:text="@string/add_station"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp"
-                android:singleLine="true"
-                android:layout_weight="1"
-                android:layout_width="85dp"
-                android:layout_height="wrap_content"/>
+                android:textSize="12sp" />
 
-            <Button android:id="@+id/presets_button_5"
+            <Button
+                android:id="@+id/presets_button_5"
                 style="@style/ButtonStripMiddle"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true"
                 android:text="@string/add_station"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp"
-                android:singleLine="true"
-                android:layout_weight="1"
-                android:layout_width="85dp"
-                android:layout_height="wrap_content"/>
+                android:textSize="12sp" />
 
-            <Button android:id="@+id/presets_button_6"
+            <Button
+                android:id="@+id/presets_button_6"
                 style="@style/ButtonStripMiddle"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true"
                 android:text="@string/add_station"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp"
-                android:singleLine="true"
-                android:layout_weight="1"
-                android:layout_width="85dp"
-                android:layout_height="wrap_content"/>
+                android:textSize="12sp" />
 
-            <Button android:id="@+id/presets_button_7"
+            <Button
+                android:id="@+id/presets_button_7"
                 style="@style/ButtonStripMiddle"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true"
                 android:text="@string/add_station"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp"
-                android:singleLine="true"
-                android:layout_weight="1"
-                android:layout_width="85dp"
-                android:layout_height="wrap_content"/>
-
+                android:textSize="12sp" />
         </LinearLayout>
-
     </HorizontalScrollView>
 
 </RelativeLayout>

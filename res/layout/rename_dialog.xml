@@ -28,40 +28,44 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- -->
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rename"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="10dp">
+    android:orientation="vertical"
+    android:padding="10dp" >
 
-    <EditText android:id="@+id/name"
+    <EditText
+        android:id="@+id/name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:textColor="#FFF"
+        android:maxLength="16"
         android:singleLine="true"
-        android:maxLength="16">
-     <requestFocus />
-     </EditText>
-     <RelativeLayout
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:padding="6dp" >
+        android:textColor="#FFF" >
 
-         <Button android:id="@+id/save"
-             android:layout_width="120dp"
-             android:layout_height="wrap_content"
-             android:text="@string/button_ok"
-             android:layout_alignParentLeft="true" />
+        <requestFocus />
+    </EditText>
 
-         <Button android:id="@+id/cancel"
-             android:layout_width="120dp"
-             android:layout_height="wrap_content"
-             android:text="@string/button_cancel"
-             android:layout_alignParentRight="true" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6dp" >
 
+        <Button
+            android:id="@+id/save"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/button_ok" />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/button_cancel" />
     </RelativeLayout>
 
 </LinearLayout>

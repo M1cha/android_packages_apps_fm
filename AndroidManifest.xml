@@ -30,6 +30,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cyanogenmod.fmradio"
     android:sharedUserId="android.uid.system" >
+
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -40,111 +41,103 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.CHANGE_COMPONENT_ENABLED_STATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
+    <uses-permission android:name="android.permission.CHANGE_COMPONENT_ENABLED_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
 
     <application
+        android:name=".FMAdapterApp"
         android:icon="@drawable/ic_launcher_fmradio"
-        android:label="@string/app_name"
-        android:name=".FMAdapterApp">
-        <activity android:icon="@drawable/ic_launcher_fmradio"
+        android:label="@string/app_name" >
+        <activity
             android:name=".FMRadio"
-            android:label="@string/app_name"
             android:clearTaskOnLaunch="true"
-            android:taskAffinity=""
+            android:excludeFromRecents="false"
+            android:icon="@drawable/ic_launcher_fmradio"
+            android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:excludeFromRecents="false" >
-
+            android:taskAffinity="" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="com.cyanogenmod.fmradio.FMRADIO_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
 
-        <receiver android:name="com.cyanogenmod.fmradio.FMMediaButtonIntentReceiver">
+        <receiver android:name="com.cyanogenmod.fmradio.FMMediaButtonIntentReceiver" >
             <intent-filter>
-                 <action android:name="android.intent.action.MEDIA_BUTTON" />
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
 
-        <activity android:name=".Settings"
-            android:label="@string/settings_menu">
-
+        <activity
+            android:name=".Settings"
+            android:label="@string/settings_menu" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
-
         </activity>
-
-        <activity android:icon="@drawable/ic_launcher_fm_tx"
+        <activity
             android:name=".FMTransmitterActivity"
-            android:label="@string/tx_app_name"
             android:clearTaskOnLaunch="true"
-            android:taskAffinity=""
-            android:excludeFromRecents="false">
-
+            android:excludeFromRecents="false"
+            android:icon="@drawable/ic_launcher_fm_tx"
+            android:label="@string/tx_app_name"
+            android:taskAffinity="" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="com.cyanogenmod.fmradio.FMTRANSMITTER_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
 
-        <receiver android:name="FMTransmitterConfigReceiver">
-
+        <receiver android:name="FMTransmitterConfigReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-
         </receiver>
 
-        <service android:name=".FMTransmitterService"
+        <service
+            android:name=".FMTransmitterService"
             android:exported="true" />
 
-        <activity android:name=".FMStats"
-            android:label="@string/test_menu">
-
+        <activity
+            android:name=".FMStats"
+            android:label="@string/test_menu" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
-
+        </activity>
+        <activity
+            android:name=".FmTags"
+            android:label="@string/rt_plus_tags" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".StationListActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|fontScale"
+            android:label="@string/app_label_all_channels" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
         </activity>
 
-        <activity android:name=".FmTags"
-            android:label="@string/rt_plus_tags">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-
-        </activity>
-
-       <activity android:name=".StationListActivity"
-            android:label="@string/app_label_all_channels"
-            android:configChanges="orientation|keyboardHidden|screenSize|fontScale">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-
-       </activity>
-
-       <service android:name=".FMRadioService"
+        <service
+            android:name=".FMRadioService"
             android:exported="true" />
-
     </application>
 
 </manifest>

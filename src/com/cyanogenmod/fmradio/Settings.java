@@ -50,487 +50,499 @@ import java.util.Locale;
 import android.util.Log;
 
 public class Settings extends PreferenceActivity implements
-                OnSharedPreferenceChangeListener, OnPreferenceClickListener {
-        public static final String RX_MODE = "rx_mode";
-        public static final String REGIONAL_BAND_KEY = "regional_band";
-        public static final String AUDIO_OUTPUT_KEY = "audio_output_mode";
-        public static final String RECORD_DURATION_KEY = "record_duration";
-        public static final String AUTO_AF = "af_checkbox_preference";
-        public static final String RESTORE_FACTORY_DEFAULT = "revert_to_fac";
-        public static final int RESTORE_FACTORY_DEFAULT_INT = 1;
-        public static final String USER_DEFINED_BAND_MIN_KEY = "user_defined_band_min";
-        public static final String USER_DEFINED_BAND_MAX_KEY = "user_defined_band_max";
-        public static final String CHAN_SPACING_KEY = "chanl_spacing";
-        public static final String RESTORE_FACTORY_DEFAULT_ACTION = "com.cyanogenmod.fmradio.settings.revert_to_defaults";
-        public static final String ACTION_FM_SETTING = "com.cyanogenmod.fmradio.settings.changed";
-        public static final int FM_BAND_CHANGED = 1;
-        public static final int FM_CHAN_SPACING_CHANGED = 2;
-        public static final int FM_AF_OPTION_CHANGED = 3;
-        public static final int FM_AUDIO_MODE_CHANGED = 4;
-        private static final String LOGTAG = FMRadio.LOGTAG;
-        private static final String USR_BAND_MSG = "Enter Freq from range 76.0 - 108.0";
+		OnSharedPreferenceChangeListener, OnPreferenceClickListener {
+	public static final String RX_MODE = "rx_mode";
+	public static final String REGIONAL_BAND_KEY = "regional_band";
+	public static final String AUDIO_OUTPUT_KEY = "audio_output_mode";
+	public static final String RECORD_DURATION_KEY = "record_duration";
+	public static final String AUTO_AF = "af_checkbox_preference";
+	public static final String RESTORE_FACTORY_DEFAULT = "revert_to_fac";
+	public static final int RESTORE_FACTORY_DEFAULT_INT = 1;
+	public static final String USER_DEFINED_BAND_MIN_KEY = "user_defined_band_min";
+	public static final String USER_DEFINED_BAND_MAX_KEY = "user_defined_band_max";
+	public static final String CHAN_SPACING_KEY = "chanl_spacing";
+	public static final String RESTORE_FACTORY_DEFAULT_ACTION = "com.cyanogenmod.fmradio.settings.revert_to_defaults";
+	public static final String ACTION_FM_SETTING = "com.cyanogenmod.fmradio.settings.changed";
+	public static final int FM_BAND_CHANGED = 1;
+	public static final int FM_CHAN_SPACING_CHANGED = 2;
+	public static final int FM_AF_OPTION_CHANGED = 3;
+	public static final int FM_AUDIO_MODE_CHANGED = 4;
+	private static final String LOGTAG = FMRadio.LOGTAG;
+	private static final String USR_BAND_MSG = "Enter Freq from range 76.0 - 108.0";
 
-        private ListPreference mBandPreference;
-        private ListPreference mAudioPreference;
-        private ListPreference mRecordDurPreference;
-        private CheckBoxPreference mAfPref;
-        private EditTextPreference mUserBandMinPref;
-        private EditTextPreference mUserBandMaxPref;
-        private ListPreference mChannelSpacingPref;
-        private Preference mRestoreDefaultPreference;
+	private ListPreference mBandPreference;
+	private ListPreference mAudioPreference;
+	private ListPreference mRecordDurPreference;
+	private CheckBoxPreference mAfPref;
+	private EditTextPreference mUserBandMinPref;
+	private EditTextPreference mUserBandMaxPref;
+	private ListPreference mChannelSpacingPref;
+	private Preference mRestoreDefaultPreference;
 
-        private FmSharedPreferences mPrefs = null;
-        private boolean mRxMode = false;
+	private FmSharedPreferences mPrefs = null;
+	private boolean mRxMode = false;
 
-        private int min_freq;
-        private int max_freq;
-        private int chan_spacing;
-        private String[] summaryBandItems;
-        private String[] chSpacingItems;
-        private String[] summaryAudioModeItems;
-        private String[] summaryRecordItems;
+	private int min_freq;
+	private int max_freq;
+	private int chan_spacing;
+	private String[] summaryBandItems;
+	private String[] chSpacingItems;
+	private String[] summaryAudioModeItems;
+	private String[] summaryRecordItems;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-          super.onCreate(savedInstanceState);
-          Intent intent = getIntent();
-          if (intent != null) {
-              mRxMode = intent.getBooleanExtra(RX_MODE, false);
-          }
-          mPrefs = new FmSharedPreferences(this);
-          if (mPrefs != null) {
-              setPreferenceScreen(createPreferenceHierarchy());
-          }
-        }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Intent intent = getIntent();
+		if (intent != null) {
+			mRxMode = intent.getBooleanExtra(RX_MODE, false);
+		}
+		mPrefs = new FmSharedPreferences(this);
+		if (mPrefs != null) {
+			setPreferenceScreen(createPreferenceHierarchy());
+		}
+	}
 
-        private PreferenceScreen createPreferenceHierarchy() {
-          int index = 0;
-          if (mPrefs == null) {
-              return null;
-          }
-          // Root
-          PreferenceScreen root = getPreferenceManager().createPreferenceScreen(
-                                this);
+	private PreferenceScreen createPreferenceHierarchy() {
+		int index = 0;
+		if (mPrefs == null) {
+			return null;
+		}
+		// Root
+		PreferenceScreen root = getPreferenceManager().createPreferenceScreen(
+				this);
 
-           summaryBandItems = getResources().getStringArray(
-                                R.array.regional_band_summary);
-           chSpacingItems = getResources().getStringArray(
-                                R.array.channel_spacing_entries);
-           mBandPreference = new ListPreference(this);
-           mBandPreference.setEntries(R.array.regional_band_entries);
-           mBandPreference.setEntryValues(R.array.regional_band_values);
-           mBandPreference.setDialogTitle(R.string.sel_band_menu);
-           mBandPreference.setKey(REGIONAL_BAND_KEY);
-           mBandPreference.setTitle(R.string.regional_band);
-           index = FmSharedPreferences.getCountry();
-           Log.d(LOGTAG, "createPreferenceHierarchy: Country: " + index);
-           // Get the preference and list the value.
-           if ((index < 0) || (index >= summaryBandItems.length)) {
-                index = 0;
-           }
-           mBandPreference.setValueIndex(index);
-           root.addPreference(mBandPreference);
+		summaryBandItems = getResources().getStringArray(
+				R.array.regional_band_summary);
+		chSpacingItems = getResources().getStringArray(
+				R.array.channel_spacing_entries);
+		mBandPreference = new ListPreference(this);
+		mBandPreference.setEntries(R.array.regional_band_entries);
+		mBandPreference.setEntryValues(R.array.regional_band_values);
+		mBandPreference.setDialogTitle(R.string.sel_band_menu);
+		mBandPreference.setKey(REGIONAL_BAND_KEY);
+		mBandPreference.setTitle(R.string.regional_band);
+		index = FmSharedPreferences.getCountry();
+		Log.d(LOGTAG, "createPreferenceHierarchy: Country: " + index);
+		// Get the preference and list the value.
+		if ((index < 0) || (index >= summaryBandItems.length)) {
+			index = 0;
+		}
+		mBandPreference.setValueIndex(index);
+		root.addPreference(mBandPreference);
 
-           mChannelSpacingPref = new ListPreference(this);
-           mChannelSpacingPref.setEntries(R.array.channel_spacing_entries);
-           mChannelSpacingPref.setEntryValues(R.array.channel_spacing_val);
-           mChannelSpacingPref.setDialogTitle(R.string.sel_chanl_spacing);
-           mChannelSpacingPref.setTitle(R.string.chanl_spacing);
-           mChannelSpacingPref.setKey(CHAN_SPACING_KEY);
+		mChannelSpacingPref = new ListPreference(this);
+		mChannelSpacingPref.setEntries(R.array.channel_spacing_entries);
+		mChannelSpacingPref.setEntryValues(R.array.channel_spacing_val);
+		mChannelSpacingPref.setDialogTitle(R.string.sel_chanl_spacing);
+		mChannelSpacingPref.setTitle(R.string.chanl_spacing);
+		mChannelSpacingPref.setKey(CHAN_SPACING_KEY);
 
-           mUserBandMinPref = new EditTextPreference(this);
-           mUserBandMinPref.setKey(USER_DEFINED_BAND_MIN_KEY);
-           mUserBandMinPref.setTitle(R.string.usr_def_band_min);
-           mUserBandMinPref.getEditText().setInputType(InputType.TYPE_CLASS_NUMBER |
-                                                        InputType.TYPE_NUMBER_FLAG_DECIMAL);
-           mUserBandMinPref.setDialogTitle(R.string.usr_def_band_min);
+		mUserBandMinPref = new EditTextPreference(this);
+		mUserBandMinPref.setKey(USER_DEFINED_BAND_MIN_KEY);
+		mUserBandMinPref.setTitle(R.string.usr_def_band_min);
+		mUserBandMinPref.getEditText().setInputType(
+				InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_DECIMAL);
+		mUserBandMinPref.setDialogTitle(R.string.usr_def_band_min);
 
-           mUserBandMaxPref = new EditTextPreference(this);
-           mUserBandMaxPref.setKey(USER_DEFINED_BAND_MAX_KEY);
-           mUserBandMaxPref.setTitle(R.string.usr_def_band_max);
-           mUserBandMaxPref.setDialogTitle(R.string.usr_def_band_max);
-           mUserBandMaxPref.getEditText().setInputType(InputType.TYPE_CLASS_NUMBER |
-                                                        InputType.TYPE_NUMBER_FLAG_DECIMAL);
+		mUserBandMaxPref = new EditTextPreference(this);
+		mUserBandMaxPref.setKey(USER_DEFINED_BAND_MAX_KEY);
+		mUserBandMaxPref.setTitle(R.string.usr_def_band_max);
+		mUserBandMaxPref.setDialogTitle(R.string.usr_def_band_max);
+		mUserBandMaxPref.getEditText().setInputType(
+				InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
-           setBandSummary(index);
+		setBandSummary(index);
 
-           root.addPreference(mChannelSpacingPref);
-           root.addPreference(mUserBandMinPref);
-           root.addPreference(mUserBandMaxPref);
+		root.addPreference(mChannelSpacingPref);
+		root.addPreference(mUserBandMinPref);
+		root.addPreference(mUserBandMaxPref);
 
-           if (mRxMode) {
-               // Audio Output (Stereo or Mono)
-               summaryAudioModeItems = getResources().getStringArray(
-                                        R.array.ster_mon_entries);
-               mAudioPreference = new ListPreference(this);
-               mAudioPreference.setEntries(R.array.ster_mon_entries);
-               mAudioPreference.setEntryValues(R.array.ster_mon_values);
-               mAudioPreference.setDialogTitle(R.string.sel_audio_output);
-               mAudioPreference.setKey(AUDIO_OUTPUT_KEY);
-               mAudioPreference.setTitle(R.string.aud_output_mode);
-               boolean audiomode = FmSharedPreferences.getAudioOutputMode();
-               if (audiomode) {
-                   index = 0;
-               } else {
-                   index = 1;
-               }
-               Log.d(LOGTAG, "createPreferenceHierarchy: audiomode: " + audiomode);
-               mAudioPreference.setSummary(summaryAudioModeItems[index]);
-               mAudioPreference.setValueIndex(index);
-               root.addPreference(mAudioPreference);
+		if (mRxMode) {
+			// Audio Output (Stereo or Mono)
+			summaryAudioModeItems = getResources().getStringArray(
+					R.array.ster_mon_entries);
+			mAudioPreference = new ListPreference(this);
+			mAudioPreference.setEntries(R.array.ster_mon_entries);
+			mAudioPreference.setEntryValues(R.array.ster_mon_values);
+			mAudioPreference.setDialogTitle(R.string.sel_audio_output);
+			mAudioPreference.setKey(AUDIO_OUTPUT_KEY);
+			mAudioPreference.setTitle(R.string.aud_output_mode);
+			boolean audiomode = FmSharedPreferences.getAudioOutputMode();
+			if (audiomode) {
+				index = 0;
+			} else {
+				index = 1;
+			}
+			Log.d(LOGTAG, "createPreferenceHierarchy: audiomode: " + audiomode);
+			mAudioPreference.setSummary(summaryAudioModeItems[index]);
+			mAudioPreference.setValueIndex(index);
+			root.addPreference(mAudioPreference);
 
-               // AF Auto Enable (Checkbox)
-               mAfPref = new CheckBoxPreference(this);
-               mAfPref.setKey(AUTO_AF);
-               mAfPref.setTitle(R.string.auto_select_af);
-               mAfPref.setSummaryOn(R.string.auto_select_af_enabled);
-               mAfPref.setSummaryOff(R.string.auto_select_af_disabled);
-               boolean bAFAutoSwitch = FmSharedPreferences.getAutoAFSwitch();
-               Log.d(LOGTAG, "createPreferenceHierarchy: bAFAutoSwitch: "
-                              + bAFAutoSwitch);
-               mAfPref.setChecked(bAFAutoSwitch);
-               root.addPreference(mAfPref);
+			// AF Auto Enable (Checkbox)
+			mAfPref = new CheckBoxPreference(this);
+			mAfPref.setKey(AUTO_AF);
+			mAfPref.setTitle(R.string.auto_select_af);
+			mAfPref.setSummaryOn(R.string.auto_select_af_enabled);
+			mAfPref.setSummaryOff(R.string.auto_select_af_disabled);
+			boolean bAFAutoSwitch = FmSharedPreferences.getAutoAFSwitch();
+			Log.d(LOGTAG, "createPreferenceHierarchy: bAFAutoSwitch: "
+					+ bAFAutoSwitch);
+			mAfPref.setChecked(bAFAutoSwitch);
+			root.addPreference(mAfPref);
 
-             if(FMRadio.RECORDING_ENABLE) {
-                  summaryRecordItems = getResources().getStringArray(
-                   R.array.record_durations_entries);
-                int nRecordDuration = 0;
-                mRecordDurPreference = new ListPreference(this);
-                mRecordDurPreference.setEntries(R.array.record_durations_entries);
-                mRecordDurPreference.setEntryValues(R.array.record_duration_values);
-                mRecordDurPreference.setDialogTitle(R.string.sel_rec_dur);
-                mRecordDurPreference.setKey(RECORD_DURATION_KEY);
-                mRecordDurPreference.setTitle(R.string.record_dur);
-                nRecordDuration = FmSharedPreferences.getRecordDuration();
-                Log.d(LOGTAG, "createPreferenceHierarchy: recordDuration: "
-                        + nRecordDuration);
-                switch(nRecordDuration) {
-                case FmSharedPreferences.RECORD_DUR_INDEX_0_VAL:
-                     index = 0;
-                     break;
-                case FmSharedPreferences.RECORD_DUR_INDEX_1_VAL:
-                     index = 1;
-                     break;
-                case FmSharedPreferences.RECORD_DUR_INDEX_2_VAL:
-                     index = 2;
-                     break;
-                case FmSharedPreferences.RECORD_DUR_INDEX_3_VAL:
-                     index = 3;
-                     break;
-                }
-                // Get the preference and list the value.
-                if ((index < 0) || (index >= summaryRecordItems.length)) {
-                   index = 0;
-                }
-                Log.d(LOGTAG, "createPreferenceHierarchy: recordDurationSummary: "
-                    + summaryRecordItems[index]);
-                mRecordDurPreference.setSummary(summaryRecordItems[index]);
-                mRecordDurPreference.setValueIndex(index);
-                root.addPreference(mRecordDurPreference);
-             }
-          }
+			if (FMRadio.RECORDING_ENABLE) {
+				summaryRecordItems = getResources().getStringArray(
+						R.array.record_durations_entries);
+				int nRecordDuration = 0;
+				mRecordDurPreference = new ListPreference(this);
+				mRecordDurPreference
+						.setEntries(R.array.record_durations_entries);
+				mRecordDurPreference
+						.setEntryValues(R.array.record_duration_values);
+				mRecordDurPreference.setDialogTitle(R.string.sel_rec_dur);
+				mRecordDurPreference.setKey(RECORD_DURATION_KEY);
+				mRecordDurPreference.setTitle(R.string.record_dur);
+				nRecordDuration = FmSharedPreferences.getRecordDuration();
+				Log.d(LOGTAG, "createPreferenceHierarchy: recordDuration: "
+						+ nRecordDuration);
+				switch (nRecordDuration) {
+				case FmSharedPreferences.RECORD_DUR_INDEX_0_VAL:
+					index = 0;
+					break;
+				case FmSharedPreferences.RECORD_DUR_INDEX_1_VAL:
+					index = 1;
+					break;
+				case FmSharedPreferences.RECORD_DUR_INDEX_2_VAL:
+					index = 2;
+					break;
+				case FmSharedPreferences.RECORD_DUR_INDEX_3_VAL:
+					index = 3;
+					break;
+				}
+				// Get the preference and list the value.
+				if ((index < 0) || (index >= summaryRecordItems.length)) {
+					index = 0;
+				}
+				Log.d(LOGTAG,
+						"createPreferenceHierarchy: recordDurationSummary: "
+								+ summaryRecordItems[index]);
+				mRecordDurPreference.setSummary(summaryRecordItems[index]);
+				mRecordDurPreference.setValueIndex(index);
+				root.addPreference(mRecordDurPreference);
+			}
+		}
 
-          // Add a new category
-          PreferenceCategory prefCat = new PreferenceCategory(this);
-          root.addPreference(prefCat);
+		// Add a new category
+		PreferenceCategory prefCat = new PreferenceCategory(this);
+		root.addPreference(prefCat);
 
-          mRestoreDefaultPreference = new Preference(this);
-          mRestoreDefaultPreference.setTitle(
-                                       R.string.settings_revert_defaults_title);
-          mRestoreDefaultPreference.setKey(RESTORE_FACTORY_DEFAULT);
-          mRestoreDefaultPreference
-                                .setSummary(R.string.settings_revert_defaults_summary);
-          mRestoreDefaultPreference.setOnPreferenceClickListener(this);
-          root.addPreference(mRestoreDefaultPreference);
-          return root;
-        }
+		mRestoreDefaultPreference = new Preference(this);
+		mRestoreDefaultPreference
+				.setTitle(R.string.settings_revert_defaults_title);
+		mRestoreDefaultPreference.setKey(RESTORE_FACTORY_DEFAULT);
+		mRestoreDefaultPreference
+				.setSummary(R.string.settings_revert_defaults_summary);
+		mRestoreDefaultPreference.setOnPreferenceClickListener(this);
+		root.addPreference(mRestoreDefaultPreference);
+		return root;
+	}
 
-        public void clearStationList() {
-          SharedPreferences sp = getSharedPreferences(FMRadio.SCAN_STATION_PREFS_NAME, 0);
-          SharedPreferences.Editor editor = sp.edit();
-          editor.clear();
-          editor.commit();
-        }
+	public void clearStationList() {
+		SharedPreferences sp = getSharedPreferences(
+				FMRadio.SCAN_STATION_PREFS_NAME, 0);
+		SharedPreferences.Editor editor = sp.edit();
+		editor.clear();
+		editor.commit();
+	}
 
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-                        String key) {
-          int mTunedFreq = 0;
-          boolean bStatus = false;
-          if (key.equals(REGIONAL_BAND_KEY)) {
-              int curListIndex = FmSharedPreferences.getCurrentListIndex();
-              PresetList curList = FmSharedPreferences.getStationList(curListIndex);
-              String valueStr = sharedPreferences.getString(key, "");
-              int index = 0;
-              if(valueStr != null) {
-                  index = mBandPreference.findIndexOfValue(valueStr);
-              }
-              if((index < 0) || (index >= summaryBandItems.length)) {
-                  index = 0;
-                  mBandPreference.setValueIndex(0);
-              }else if((index + 1) == summaryBandItems.length) {
-                   mChannelSpacingPref.setEnabled(true);
-              }else {
-                   mChannelSpacingPref.setEnabled(false);
-              }
-              Log.d(LOGTAG, "onSharedPreferenceChanged: Country Change: "
-                                                        + index);
-              FmSharedPreferences.setCountry(index);
-              setBandSummary(index);
-              sendSettingsChangedIntent(FM_BAND_CHANGED);
-              if (curList != null) {
-                  curList.clear();
-              }
-              clearStationList();
-           }else if(key.equals(CHAN_SPACING_KEY)) {
-               int curListIndex = FmSharedPreferences.getCurrentListIndex();
-               PresetList curList = FmSharedPreferences.getStationList(curListIndex);
-               String valStr = mChannelSpacingPref.getValue();
-               int index = 0;
-               if(valStr != null) {
-                  index  = mChannelSpacingPref.findIndexOfValue(valStr);
-               }
-               if ((index < 0) || (index >= chSpacingItems.length)) {
-                   index = 0;
-                   mChannelSpacingPref.setValueIndex(0);
-               }
-               mChannelSpacingPref.setSummary(chSpacingItems[index]);
-               FmSharedPreferences.setChSpacing(2 - index);
-               sendSettingsChangedIntent(FM_CHAN_SPACING_CHANGED);
-               if(curList != null) {
-                  curList.clear();
-               }
-               clearStationList();
-           }else if(key.equals(USER_DEFINED_BAND_MIN_KEY)) {
-               String valStr = mUserBandMinPref.getText();
-               double freq = 0;
-               try {
-                    freq = Double.parseDouble(valStr) * 1000;
-               }catch(NumberFormatException e) {
-                    e.printStackTrace();
-                    return;
-               }
-               max_freq = FmSharedPreferences.getUpperLimit();
-               min_freq = FmSharedPreferences.getLowerLimit();
-               if((freq > 0) && (freq < max_freq) && (freq >= 76000)) {
-                  FmSharedPreferences.setLowerLimit((int)freq);
-                  sendSettingsChangedIntent(FM_BAND_CHANGED);
-                  setBandSummary(summaryBandItems.length - 1);
-                  clearStationList();
-               }else {
-                  displayToast(USR_BAND_MSG);
-               }
-           }else if(key.equals(USER_DEFINED_BAND_MAX_KEY)) {
-               String valStr = mUserBandMaxPref.getText();
-               double freq = 0;
-               try {
-                    freq = Double.parseDouble(valStr) * 1000;
-               }catch(NumberFormatException e) {
-                    e.printStackTrace();
-                    return;
-               }
-               min_freq = FmSharedPreferences.getLowerLimit();
-               max_freq = FmSharedPreferences.getUpperLimit();
-               if((freq > 0) && (freq > min_freq) && (freq <= 108000)) {
-                  FmSharedPreferences.setUpperLimit((int)freq);
-                  sendSettingsChangedIntent(FM_BAND_CHANGED);
-                  setBandSummary(summaryBandItems.length - 1);
-                  clearStationList();
-               }else {
-                  displayToast(USR_BAND_MSG);
-               }
-          }else {
-              if(mRxMode) {
-                 if (key.equals(AUTO_AF)) {
-                     boolean bAFAutoSwitch = mAfPref.isChecked();
-                     Log.d(LOGTAG, "onSharedPreferenceChanged: Auto AF Enable: "
-                                               + bAFAutoSwitch);
-                     FmSharedPreferences.setAutoAFSwitch(bAFAutoSwitch);
-                     mPrefs.Save();
-                     sendSettingsChangedIntent(FM_AF_OPTION_CHANGED);
-                 }else if(key.equals(RECORD_DURATION_KEY)) {
-                     if(FMRadio.RECORDING_ENABLE) {
-                        String valueStr = mRecordDurPreference.getValue();
-                        int index = 0;
-                        if (valueStr != null) {
-                            index = mRecordDurPreference.findIndexOfValue(valueStr);
-                        }
-                          if ((index < 0) || (index >= summaryRecordItems.length)) {
-                             index = 0;
-                             mRecordDurPreference.setValueIndex(index);
-                        }
-                        Log.d(LOGTAG, "onSharedPreferenceChanged: recorddur: "
-                                     + summaryRecordItems[index]);
-                          mRecordDurPreference.setSummary(summaryRecordItems[index]);
-                          FmSharedPreferences.setRecordDuration(index);
-                       }
-                   } else if (key.equals(AUDIO_OUTPUT_KEY)) {
-                       String valueStr = mAudioPreference.getValue();
-                       int index = 0;
-                       if (valueStr != null) {
-                           index = mAudioPreference.findIndexOfValue(valueStr);
-                       }
-                       if (index != 1) {
-                          if (index != 0) {
-                              index = 0;
-                              /* It shud be 0(Stereo) or 1(Mono) */
-                              mAudioPreference.setValueIndex(index);
-                          }
-                       }
-                       Log.d(LOGTAG, "onSharedPreferenceChanged: audiomode: "
-                                      + summaryAudioModeItems[index]);
-                       mAudioPreference.setSummary(summaryAudioModeItems[index]);
-                     if (index == 0) {
-                         // Stereo
-                         FmSharedPreferences.setAudioOutputMode(true);
-                     }else {
-                         // Mono
-                         FmSharedPreferences.setAudioOutputMode(false);
-                     }
-                     mPrefs.Save();
-                     sendSettingsChangedIntent(FM_AUDIO_MODE_CHANGED);
-                 }
-              }
-          }
-          if (mPrefs != null) {
-              if(bStatus) {
-                 mPrefs.Save();
-              }else {
-                 mTunedFreq = FmSharedPreferences.getTunedFrequency();
-                 if (mTunedFreq > FmSharedPreferences.getUpperLimit() ||
-                          mTunedFreq < FmSharedPreferences.getLowerLimit()) {
-                     FmSharedPreferences.setTunedFrequency(
-                          FmSharedPreferences.getLowerLimit());
-                 }
-                 mPrefs.Save();
-              }
-          }
-        }
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
+		int mTunedFreq = 0;
+		boolean bStatus = false;
+		if (key.equals(REGIONAL_BAND_KEY)) {
+			int curListIndex = FmSharedPreferences.getCurrentListIndex();
+			PresetList curList = FmSharedPreferences
+					.getStationList(curListIndex);
+			String valueStr = sharedPreferences.getString(key, "");
+			int index = 0;
+			if (valueStr != null) {
+				index = mBandPreference.findIndexOfValue(valueStr);
+			}
+			if ((index < 0) || (index >= summaryBandItems.length)) {
+				index = 0;
+				mBandPreference.setValueIndex(0);
+			} else if ((index + 1) == summaryBandItems.length) {
+				mChannelSpacingPref.setEnabled(true);
+			} else {
+				mChannelSpacingPref.setEnabled(false);
+			}
+			Log.d(LOGTAG, "onSharedPreferenceChanged: Country Change: " + index);
+			FmSharedPreferences.setCountry(index);
+			setBandSummary(index);
+			sendSettingsChangedIntent(FM_BAND_CHANGED);
+			if (curList != null) {
+				curList.clear();
+			}
+			clearStationList();
+		} else if (key.equals(CHAN_SPACING_KEY)) {
+			int curListIndex = FmSharedPreferences.getCurrentListIndex();
+			PresetList curList = FmSharedPreferences
+					.getStationList(curListIndex);
+			String valStr = mChannelSpacingPref.getValue();
+			int index = 0;
+			if (valStr != null) {
+				index = mChannelSpacingPref.findIndexOfValue(valStr);
+			}
+			if ((index < 0) || (index >= chSpacingItems.length)) {
+				index = 0;
+				mChannelSpacingPref.setValueIndex(0);
+			}
+			mChannelSpacingPref.setSummary(chSpacingItems[index]);
+			FmSharedPreferences.setChSpacing(2 - index);
+			sendSettingsChangedIntent(FM_CHAN_SPACING_CHANGED);
+			if (curList != null) {
+				curList.clear();
+			}
+			clearStationList();
+		} else if (key.equals(USER_DEFINED_BAND_MIN_KEY)) {
+			String valStr = mUserBandMinPref.getText();
+			double freq = 0;
+			try {
+				freq = Double.parseDouble(valStr) * 1000;
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+				return;
+			}
+			max_freq = FmSharedPreferences.getUpperLimit();
+			min_freq = FmSharedPreferences.getLowerLimit();
+			if ((freq > 0) && (freq < max_freq) && (freq >= 76000)) {
+				FmSharedPreferences.setLowerLimit((int) freq);
+				sendSettingsChangedIntent(FM_BAND_CHANGED);
+				setBandSummary(summaryBandItems.length - 1);
+				clearStationList();
+			} else {
+				displayToast(USR_BAND_MSG);
+			}
+		} else if (key.equals(USER_DEFINED_BAND_MAX_KEY)) {
+			String valStr = mUserBandMaxPref.getText();
+			double freq = 0;
+			try {
+				freq = Double.parseDouble(valStr) * 1000;
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+				return;
+			}
+			min_freq = FmSharedPreferences.getLowerLimit();
+			max_freq = FmSharedPreferences.getUpperLimit();
+			if ((freq > 0) && (freq > min_freq) && (freq <= 108000)) {
+				FmSharedPreferences.setUpperLimit((int) freq);
+				sendSettingsChangedIntent(FM_BAND_CHANGED);
+				setBandSummary(summaryBandItems.length - 1);
+				clearStationList();
+			} else {
+				displayToast(USR_BAND_MSG);
+			}
+		} else {
+			if (mRxMode) {
+				if (key.equals(AUTO_AF)) {
+					boolean bAFAutoSwitch = mAfPref.isChecked();
+					Log.d(LOGTAG, "onSharedPreferenceChanged: Auto AF Enable: "
+							+ bAFAutoSwitch);
+					FmSharedPreferences.setAutoAFSwitch(bAFAutoSwitch);
+					mPrefs.Save();
+					sendSettingsChangedIntent(FM_AF_OPTION_CHANGED);
+				} else if (key.equals(RECORD_DURATION_KEY)) {
+					if (FMRadio.RECORDING_ENABLE) {
+						String valueStr = mRecordDurPreference.getValue();
+						int index = 0;
+						if (valueStr != null) {
+							index = mRecordDurPreference
+									.findIndexOfValue(valueStr);
+						}
+						if ((index < 0) || (index >= summaryRecordItems.length)) {
+							index = 0;
+							mRecordDurPreference.setValueIndex(index);
+						}
+						Log.d(LOGTAG, "onSharedPreferenceChanged: recorddur: "
+								+ summaryRecordItems[index]);
+						mRecordDurPreference
+								.setSummary(summaryRecordItems[index]);
+						FmSharedPreferences.setRecordDuration(index);
+					}
+				} else if (key.equals(AUDIO_OUTPUT_KEY)) {
+					String valueStr = mAudioPreference.getValue();
+					int index = 0;
+					if (valueStr != null) {
+						index = mAudioPreference.findIndexOfValue(valueStr);
+					}
+					if (index != 1) {
+						if (index != 0) {
+							index = 0;
+							/* It shud be 0(Stereo) or 1(Mono) */
+							mAudioPreference.setValueIndex(index);
+						}
+					}
+					Log.d(LOGTAG, "onSharedPreferenceChanged: audiomode: "
+							+ summaryAudioModeItems[index]);
+					mAudioPreference.setSummary(summaryAudioModeItems[index]);
+					if (index == 0) {
+						// Stereo
+						FmSharedPreferences.setAudioOutputMode(true);
+					} else {
+						// Mono
+						FmSharedPreferences.setAudioOutputMode(false);
+					}
+					mPrefs.Save();
+					sendSettingsChangedIntent(FM_AUDIO_MODE_CHANGED);
+				}
+			}
+		}
+		if (mPrefs != null) {
+			if (bStatus) {
+				mPrefs.Save();
+			} else {
+				mTunedFreq = FmSharedPreferences.getTunedFrequency();
+				if (mTunedFreq > FmSharedPreferences.getUpperLimit()
+						|| mTunedFreq < FmSharedPreferences.getLowerLimit()) {
+					FmSharedPreferences.setTunedFrequency(FmSharedPreferences
+							.getLowerLimit());
+				}
+				mPrefs.Save();
+			}
+		}
+	}
 
-        public boolean onPreferenceClick(Preference preference) {
-          boolean handled = false;
-          if (preference == mRestoreDefaultPreference) {
-              showDialog(RESTORE_FACTORY_DEFAULT_INT);
-          }
-          return handled;
-        }
+	public boolean onPreferenceClick(Preference preference) {
+		boolean handled = false;
+		if (preference == mRestoreDefaultPreference) {
+			showDialog(RESTORE_FACTORY_DEFAULT_INT);
+		}
+		return handled;
+	}
 
-        @Override
-        protected Dialog onCreateDialog(int id) {
-          switch (id) {
-          case RESTORE_FACTORY_DEFAULT_INT:
-               return new AlertDialog.Builder(this).setIcon(
-                      R.drawable.alert_dialog_icon).setTitle(
-                      R.string.settings_revert_confirm_title).setMessage(
-                      R.string.settings_revert_confirm_msg).setPositiveButton(
-                      R.string.alert_dialog_ok,
-                      new DialogInterface.OnClickListener() {
-                           public void onClick(DialogInterface dialog,
-                              int whichButton) {
-                              Intent data = new Intent(
-                                         RESTORE_FACTORY_DEFAULT_ACTION);
-                              setResult(RESULT_OK, data);
-                              restoreSettingsDefault();
-                              finish();
-                           }
-                      }).setNegativeButton(R.string.alert_dialog_cancel,
-                              new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,
-                                                       int whichButton) {
-                                }
-                              }).create();
-                default:
-                        break;
-                }
-                return null;
-        }
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case RESTORE_FACTORY_DEFAULT_INT:
+			return new AlertDialog.Builder(this)
+					.setIcon(R.drawable.alert_dialog_icon)
+					.setTitle(R.string.settings_revert_confirm_title)
+					.setMessage(R.string.settings_revert_confirm_msg)
+					.setPositiveButton(R.string.alert_dialog_ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									Intent data = new Intent(
+											RESTORE_FACTORY_DEFAULT_ACTION);
+									setResult(RESULT_OK, data);
+									restoreSettingsDefault();
+									finish();
+								}
+							})
+					.setNegativeButton(R.string.alert_dialog_cancel,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+								}
+							}).create();
+		default:
+			break;
+		}
+		return null;
+	}
 
-        private void restoreSettingsDefault() {
-          if (mPrefs != null) {
-             if (Locale.getDefault().equals(Locale.CHINA)) {
-                 mBandPreference
-                        .setValueIndex(FmSharedPreferences.REGIONAL_BAND_CHINA);
-             }else {
-                 mBandPreference
-                        .setValueIndex(FmSharedPreferences.REGIONAL_BAND_NORTH_AMERICA);
-             }
-             if (mRxMode) {
-                mAudioPreference.setValueIndex(0);
-                if (FMRadio.RECORDING_ENABLE) {
-                    mRecordDurPreference.setValueIndex(0);
-                }
-                mAfPref.setChecked(true);
-                FmSharedPreferences.SetDefaults();
-             }else {
-                if (Locale.getDefault().equals(Locale.CHINA)) {
-                    FmSharedPreferences
-                    .setCountry(FmSharedPreferences.REGIONAL_BAND_CHINA);
-                }else{
-                    FmSharedPreferences
-                    .setCountry(FmSharedPreferences.REGIONAL_BAND_NORTH_AMERICA);
-                }
-             }
-             mPrefs.Save();
-          }
-        }
+	private void restoreSettingsDefault() {
+		if (mPrefs != null) {
+			if (Locale.getDefault().equals(Locale.CHINA)) {
+				mBandPreference
+						.setValueIndex(FmSharedPreferences.REGIONAL_BAND_CHINA);
+			} else {
+				mBandPreference
+						.setValueIndex(FmSharedPreferences.REGIONAL_BAND_NORTH_AMERICA);
+			}
+			if (mRxMode) {
+				mAudioPreference.setValueIndex(0);
+				if (FMRadio.RECORDING_ENABLE) {
+					mRecordDurPreference.setValueIndex(0);
+				}
+				mAfPref.setChecked(true);
+				FmSharedPreferences.SetDefaults();
+			} else {
+				if (Locale.getDefault().equals(Locale.CHINA)) {
+					FmSharedPreferences
+							.setCountry(FmSharedPreferences.REGIONAL_BAND_CHINA);
+				} else {
+					FmSharedPreferences
+							.setCountry(FmSharedPreferences.REGIONAL_BAND_NORTH_AMERICA);
+				}
+			}
+			mPrefs.Save();
+		}
+	}
 
-        @Override
-        protected void onResume() {
-          super.onResume();
-          PreferenceScreen preferenceScreen = getPreferenceScreen();
-          SharedPreferences sharedPreferences = null;
-          if (preferenceScreen != null) {
-              sharedPreferences = preferenceScreen.getSharedPreferences();
-          }
-          if (sharedPreferences != null) {
-              sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-          }
-        }
+	@Override
+	protected void onResume() {
+		super.onResume();
+		PreferenceScreen preferenceScreen = getPreferenceScreen();
+		SharedPreferences sharedPreferences = null;
+		if (preferenceScreen != null) {
+			sharedPreferences = preferenceScreen.getSharedPreferences();
+		}
+		if (sharedPreferences != null) {
+			sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+		}
+	}
 
-        @Override
-        protected void onPause() {
-          super.onPause();
-          PreferenceScreen preferenceScreen = getPreferenceScreen();
-          SharedPreferences sharedPreferences = null;
-          if (preferenceScreen != null) {
-              sharedPreferences = preferenceScreen.getSharedPreferences();
-          }
-          if (sharedPreferences != null) {
-              sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
-          }
-        }
-        private void setBandSummary(int index) {
-           if((index + 1) == summaryBandItems.length) {
-              min_freq = FmSharedPreferences.getLowerLimit();
-              max_freq = FmSharedPreferences.getUpperLimit();
-              chan_spacing = FmSharedPreferences.getChSpacing();
-              if(chan_spacing < 0) {
-                 chan_spacing = 0;
-              }
-              mBandPreference.setSummary(summaryBandItems[index] + "( "
-                       + (min_freq / 1000.0) +"Mhz To " + (max_freq / 1000.0) +
-                       "Mhz)");
-              mChannelSpacingPref.setValueIndex(2 - chan_spacing);
-              mChannelSpacingPref.setSummary(chSpacingItems[2 - chan_spacing]);
-              mChannelSpacingPref.setEnabled(true);
-              mUserBandMinPref.setEnabled(true);
-              mUserBandMaxPref.setEnabled(true);
-              mUserBandMinPref.setSummary((min_freq / 1000.0) + "Mhz");
-              mUserBandMaxPref.setSummary((max_freq / 1000.0) + "Mhz");
-           }else {
-              mBandPreference.setSummary(summaryBandItems[index]);
-              mChannelSpacingPref.setEnabled(false);
-              mUserBandMinPref.setEnabled(false);
-              mUserBandMaxPref.setEnabled(false);
-           }
-        }
-        private void displayToast(String msg) {
-           Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-        }
+	@Override
+	protected void onPause() {
+		super.onPause();
+		PreferenceScreen preferenceScreen = getPreferenceScreen();
+		SharedPreferences sharedPreferences = null;
+		if (preferenceScreen != null) {
+			sharedPreferences = preferenceScreen.getSharedPreferences();
+		}
+		if (sharedPreferences != null) {
+			sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+		}
+	}
 
-        private void sendSettingsChangedIntent(int action) {
-           Intent intent = new Intent(ACTION_FM_SETTING);
-           intent.putExtra("state", action);
-           Log.d(LOGTAG, "Sending  FM SETTING Change intent for = " + action);
-           getApplicationContext().sendBroadcast(intent);
-        }
+	private void setBandSummary(int index) {
+		if ((index + 1) == summaryBandItems.length) {
+			min_freq = FmSharedPreferences.getLowerLimit();
+			max_freq = FmSharedPreferences.getUpperLimit();
+			chan_spacing = FmSharedPreferences.getChSpacing();
+			if (chan_spacing < 0) {
+				chan_spacing = 0;
+			}
+			mBandPreference.setSummary(summaryBandItems[index] + "( "
+					+ (min_freq / 1000.0) + "Mhz To " + (max_freq / 1000.0)
+					+ "Mhz)");
+			mChannelSpacingPref.setValueIndex(2 - chan_spacing);
+			mChannelSpacingPref.setSummary(chSpacingItems[2 - chan_spacing]);
+			mChannelSpacingPref.setEnabled(true);
+			mUserBandMinPref.setEnabled(true);
+			mUserBandMaxPref.setEnabled(true);
+			mUserBandMinPref.setSummary((min_freq / 1000.0) + "Mhz");
+			mUserBandMaxPref.setSummary((max_freq / 1000.0) + "Mhz");
+		} else {
+			mBandPreference.setSummary(summaryBandItems[index]);
+			mChannelSpacingPref.setEnabled(false);
+			mUserBandMinPref.setEnabled(false);
+			mUserBandMaxPref.setEnabled(false);
+		}
+	}
+
+	private void displayToast(String msg) {
+		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+	}
+
+	private void sendSettingsChangedIntent(int action) {
+		Intent intent = new Intent(ACTION_FM_SETTING);
+		intent.putExtra("state", action);
+		Log.d(LOGTAG, "Sending  FM SETTING Change intent for = " + action);
+		getApplicationContext().sendBroadcast(intent);
+	}
 }

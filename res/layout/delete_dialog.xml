@@ -28,40 +28,42 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- -->
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
-    <TextView android:id="@+id/prompt"
+    <TextView
+        android:id="@+id/prompt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:drawableLeft="@android:drawable/ic_dialog_alert"
-        android:drawablePadding="8dp">
+        android:drawablePadding="8dp" >
     </TextView>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="6dp">
+        android:padding="6dp" >
 
-        <Button android:id="@+id/delete"
+        <Button
+            android:id="@+id/delete"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="@string/button_delete"
+            android:layout_alignParentLeft="true"
             android:layout_gravity="center_horizontal"
-            android:layout_alignParentLeft="true" />
+            android:text="@string/button_delete" />
 
-        <Button android:id="@+id/cancel"
+        <Button
+            android:id="@+id/cancel"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="@string/button_cancel"
-            android:layout_alignParentRight="true" />
-
+            android:layout_alignParentRight="true"
+            android:text="@string/button_cancel" />
     </RelativeLayout>
 
 </LinearLayout>

@@ -26,8 +26,11 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package com.cyanogenmod.fmradio;
+
 public interface GetNextFreqInterface {
-   public int getNextFreq();
-   public void Stop();
-   public boolean errorOccured();
+	public int getNextFreq();
+
+	public void Stop();
+
+	public boolean errorOccured();
 }
