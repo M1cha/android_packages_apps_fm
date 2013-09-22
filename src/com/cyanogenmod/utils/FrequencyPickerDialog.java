@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012 - 2013, The Linux Foundation. All rights reserved.
  * Not a Contribution
  *
  * Copyright (C) 2007 The Android Open Source Project
@@ -147,5 +147,27 @@ public class FrequencyPickerDialog extends AlertDialog implements
 		int MHz = frequency / 1000;
 		int KHz = (frequency % 1000) / 100;
 		setTitle("FM - " + MHz + "." + KHz);
+	}
+
+	public void updateSteps(int steps) {
+		mChannelSpacing = 200;
+		if (FmReceiver.FM_CHSPACE_200_KHZ == steps) {
+			mChannelSpacing = 200;
+		} else if (FmReceiver.FM_CHSPACE_100_KHZ == steps) {
+			mChannelSpacing = 100;
+		} else if (FmReceiver.FM_CHSPACE_50_KHZ == steps) {
+			mChannelSpacing = 50;
+		}
+		mFrequencyPicker.updateSteps(mChannelSpacing);
+	}
+
+	public void updateMinFreq(int freq) {
+		mMinFrequency = freq;
+		mFrequencyPicker.updateMinFreq(mMinFrequency);
+	}
+
+	public void updateMaxFreq(int freq) {
+		mMaxFrequency = freq;
+		mFrequencyPicker.updateMaxFreq(mMaxFrequency);
 	}
 }

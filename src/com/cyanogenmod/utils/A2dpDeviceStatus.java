@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,40 +29,44 @@
 package com.cyanogenmod.utils;
 
 import android.bluetooth.BluetoothA2dp;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
+import android.bluetooth.BluetoothProfile;
 import android.content.Intent;
-
-import java.util.Set;
+import android.content.Context;
 
 public class A2dpDeviceStatus {
+	private BluetoothAdapter mAdapter;
 	private BluetoothA2dp mA2dp = null;
 
 	public String getActionSinkStateChangedString() {
-		return BluetoothA2dp.ACTION_SINK_STATE_CHANGED;
+		return BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED;
 	}
 
 	public String getActionPlayStateChangedString() {
-		return BluetoothA2dp.ACTION_SINK_STATE_CHANGED;
+		return BluetoothA2dp.ACTION_PLAYING_STATE_CHANGED;
 	}
 
 	public boolean isA2dpStateChange(String action) {
-		if (action.equals(BluetoothA2dp.ACTION_SINK_STATE_CHANGED)) {
+		if (action.equals(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED)) {
 			return true;
 		}
 		return false;
 	}
 
 	public boolean isA2dpPlayStateChange(String action) {
-		return isA2dpStateChange(action);
+		if (action.equals(BluetoothA2dp.ACTION_PLAYING_STATE_CHANGED)) {
+			return true;
+		}
+		return false;
 	}
 
 	public boolean isConnected(Intent intent) {
 		boolean isConnected = false;
-		int state = intent.getIntExtra(BluetoothA2dp.EXTRA_SINK_STATE,
+		int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE,
 				BluetoothA2dp.STATE_DISCONNECTED);
-		if (state == BluetoothA2dp.STATE_CONNECTED
-				|| state == BluetoothA2dp.STATE_PLAYING) {
+		if ((state == BluetoothA2dp.STATE_CONNECTED)
+				|| (state == BluetoothProfile.STATE_CONNECTED)) {
 			isConnected = true;
 		}
 		return isConnected;
@@ -70,7 +74,7 @@ public class A2dpDeviceStatus {
 
 	public boolean isPlaying(Intent intent) {
 		boolean isPlaying = false;
-		int state = intent.getIntExtra(BluetoothA2dp.EXTRA_SINK_STATE,
+		int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE,
 				BluetoothA2dp.STATE_DISCONNECTED);
 		if (state == BluetoothA2dp.STATE_PLAYING) {
 			isPlaying = true;
@@ -79,17 +83,31 @@ public class A2dpDeviceStatus {
 	}
 
 	public boolean isDeviceAvailable() {
-		if (null == mA2dp)
-			return false;
-		Set<BluetoothDevice> sinks = mA2dp.getConnectedSinks();
-		if (sinks != null && sinks.size() != 0) {
-			return true;
+		if (null != mA2dp) {
+			if (0 != mA2dp.getConnectedDevices().size()) {
+				return true;
+			}
 		}
 		return false;
 	}
 
 	public A2dpDeviceStatus(Context mContext) {
-		mA2dp = new BluetoothA2dp(mContext);
+		mAdapter = BluetoothAdapter.getDefaultAdapter();
+		mAdapter.getProfileProxy(mContext, mProfileListener,
+				BluetoothProfile.A2DP);
 	}
 
+	private BluetoothProfile.ServiceListener mProfileListener = new BluetoothProfile.ServiceListener() {
+		public void onServiceConnected(int profile, BluetoothProfile proxy) {
+			if (profile == BluetoothProfile.A2DP) {
+				mA2dp = (BluetoothA2dp) proxy;
+			}
+		}
+
+		public void onServiceDisconnected(int profile) {
+			if (profile == BluetoothProfile.A2DP) {
+				mA2dp = null;
+			}
+		}
+	};
 }
