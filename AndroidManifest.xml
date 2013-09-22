@@ -108,9 +108,7 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".FMTransmitterService"
-            android:exported="true" />
+        <service android:name=".FMTransmitterService" />
 
         <activity
             android:name=".FMStats"
@@ -135,9 +133,7 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".FMRadioService"
-            android:exported="true" />
+        <service android:name=".FMRadioService" />
     </application>
 
 </manifest>
